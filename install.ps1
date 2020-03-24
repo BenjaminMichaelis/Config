@@ -25,7 +25,7 @@ function Add-ScoopBucket {
   if(-not (Get-Command git -ErrorAction Ignore)) {
     choco install git -y /GitOnlyOnPath /NoAutoCrlf
     Set-Alias -Name Git -Value (Join-Path $env:ProgramFiles 'Git\cmd\git.exe')
-  }
+  } 
 
   if((scoop bucket list) -notcontains $name) {
     Write-Host "scoop bucket add $name $url"
