@@ -1,4 +1,4 @@
-if((Get-ExecutionPolicy) -eq 'Restricted') {
+  if((Get-ExecutionPolicy) -eq 'Restricted') {
   Set-ExecutionPolicy Bypass -Scope Process -Force
 }
 
@@ -35,4 +35,4 @@ function Add-ScoopBucket {
     Write-Information -MessageData "Scoopbucket $name is already added."
   }
 }
-Add-ScoopBucket -Name 'MarkMichaelis' -Url 'https://github.com/MarkMichaelis/ScoopBucket.git'
+Add-ScoopBucket -Name 'MarkMichaelis' -Url 'https://github.com/MarkMichaelis/ScoopBucket'
