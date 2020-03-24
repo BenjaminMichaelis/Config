@@ -24,12 +24,13 @@ function Add-ScoopBucket {
   # Git is required when adding an additional scoop bucket.
   if(-not (Get-Command git -ErrorAction Ignore)) {
     choco install git -y --params "/GitOnlyOnPath /NoAutoCrlf /NoShellHereIntegration"
-    Set-Alias -Name git -Value "$env:ProgramFiles\Git\cmd\git.exe"
+    # Set-Alias -Name git -Value "$env:ProgramFiles\Git\cmd\git.exe"
   } 
 
   if((scoop bucket list) -notcontains $name) {
     Write-Host "scoop bucket add $name $url"
-    scoop bucket add $name $url
+    # Run in new PowerShell process to ensure git path is enabled.
+    powershell -ExecutionPolicy unrestricted -Command scoop bucket add $name $url
   }
   else {
     Write-Information -MessageData "Scoopbucket $name is already added."
