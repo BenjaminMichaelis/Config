@@ -24,7 +24,7 @@ function Add-ScoopBucket {
   # Git is required when adding an additional scoop bucket.
   if(-not (Get-Command git -ErrorAction Ignore)) {
     choco install git -y /GitOnlyOnPath /NoAutoCrlf
-  }}
+  }
 
   if((scoop bucket list) -notcontains $name) {
     scoop bucket add $name $url 
