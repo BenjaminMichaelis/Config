@@ -15,7 +15,7 @@ if(-not (Get-Command scoop -ErrorAction Ignore)) {
 
 
 function Add-ScoopBucket {
-  [CmdletBinging()]
+  [CmdletBinding()]
   param(
     [string]$name,
     [string]$url
