@@ -23,7 +23,7 @@ function Add-ScoopBucket {
 
   # Git is required when adding an additional scoop bucket.
   if(-not (Get-Command git -ErrorAction Ignore)) {
-    choco install git -y /GitOnlyOnPath /NoAutoCrlf
+    choco install git -y --params "/GitOnlyOnPath /NoAutoCrlf /NoShellHereIntegration"
     Set-Alias -Name Git -Value "$env:ProgramFiles\Git\cmd\git.exe"
   } 
 
