@@ -27,7 +27,8 @@ function Add-ScoopBucket {
   }
 
   if((scoop bucket list) -notcontains $name) {
-    scoop bucket add $name $url 
+    Write-Host "scoop bucket add $name $url"
+    scoop bucket add $name $url
   }
   else {
     Write-Information -MessageData "Scoopbucket $name is already added."
