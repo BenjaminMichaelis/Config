@@ -6,6 +6,7 @@
         "url": "https://raw.githubusercontent.com/lukesampson/scoop/master/schema.json"
     }],
     "cSpell.words": [
-        "choco"
+        "choco",
+        "powercfg"
     ]
 }
