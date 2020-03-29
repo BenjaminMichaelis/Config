@@ -1,6 +1,6 @@
 ﻿{
-    "version": "1.0.002",
-    "url": ["http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp"],
+    "version": "1.0.003",
+    "url": ["http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp#/MCPR.exe"],
     "installer": {
         "file": "MCPR.exe"
     }
