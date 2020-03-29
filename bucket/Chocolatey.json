@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.001",
+    "version": "1.01.000",
     "url": [
         "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/Utils.ps1",
         "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/Chocolatey.ps1"
