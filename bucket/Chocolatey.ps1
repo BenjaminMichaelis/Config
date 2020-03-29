@@ -1,3 +1,5 @@
+Write-Host 'Installing and configuring Chocolatey...'
+
 . $PSScriptRoot\Utils.ps1
 
 Function Install-Chocolatey {

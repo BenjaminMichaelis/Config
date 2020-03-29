@@ -1,4 +1,7 @@
 ﻿{
-    "version": "1.0.001",
-    "url": ["https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/OsBase.ps1"]
+    "version": "1.0.002",
+    "url": [
+        "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/Utils.ps1",
+        "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/OSBase.ps1"
+    ]
 }
