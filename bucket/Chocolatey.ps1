@@ -3,15 +3,16 @@ Write-Host 'Installing and configuring Chocolatey...'
 . $PSScriptRoot\Utils.ps1
 
 Function Install-Chocolatey {
-
     if (Get-Command -name choco -ErrorAction Ignore) {
         Write-Information 'Chocolatey is already installed and configured.'
         return
     }
-
+    
     if (-not (Test-Command choco)) {
+        Write-Output "Installing Chocolatey..."
         Invoke-WebRequest https://chocolatey.org/install.ps1 -UseBasicParsing | Invoke-Expression
     }
+    Write-Output "Configuring Chocolatey..."
     choco feature enable -n allowglobalconfirmation
     choco feature enable -n allowEmptyChecksums
     choco feature enable -n allowEmptyChecksumsSecure
