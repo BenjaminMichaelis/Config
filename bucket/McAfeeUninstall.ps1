@@ -9,7 +9,8 @@ Function Uninstall-McAfeeApplications {
     Get-Program 'McAfee*' | ForEach-Object {
         try {
             Write-Host "Uninstalling $($_.Name)..."
-            Invoke-Expression $_.UninstallString
+            $uninstallString = "'$($_.UninstallString -replace '.exe','.exe''')"
+            Invoke-Expression $uninstallString
         }
         catch {
             Write-Error "Error occurred: $_"
