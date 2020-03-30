@@ -2,7 +2,7 @@
     "version": "1.0.003",
     "url": [
         "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/Utils.ps1",
-        "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/OSBase.ps1"
+        "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/OSBasePackages.ps1"
     ],
     "installer": {
         "file"
