@@ -20,6 +20,34 @@ Function Test-ChocolateyPackageInstalled {
     Write-Output $installed
 }
 
+Function Get-Program {
+    [CmdletBinding()] param([string] $Filter = "*") 
+
+    Function Get-ProgramRegistryKeys {
+        [CmdletBinding()][OutputType('System.String[]')] param()
+
+        return [string[]] "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+        "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+        "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall",
+        "Microsoft.PowerShell.Core\Registry::HKEY_USERS\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Uninstall"
+    }
+
+    # REview for 32/64 Bit
+    # http://gallery.technet.microsoft.com/scriptcenter/PowerShell-Installed-70d0c0f4
+
+    (Get-ProgramRegistryKeys) | Get-ChildItem | Get-ItemProperty | 
+    Select-Object  *, @{Name = "Name"; Expression = { 
+            if ( ($_ | Get-Member "DisplayName") -and $_.DisplayName) {
+                #Consider $_.PSObject.Properties.Match("DisplayName") as it may be faster
+                $_.DisplayName
+            } 
+            else { 
+                $_.PSChildName 
+            } 
+        }
+    } | 
+    Where-Object { ($_.Name -Like $Filter) -or ($_.PSChildName -Like $Filter) } 
+}
 
 Function Import-ChocolateyModule {
     if (test-path env:ChocolateyInstall) {
