@@ -1,7 +1,7 @@
 
-. $PSScriptRoot\Utils.ps1
-
 Write-Host "Uninstalling McAfee Applications..."
+
+. $PSScriptRoot\Utils.ps1
 
 Function Uninstall-McAfeeApplications {
     Write-Host "Running $($MyInvocation.MyCommand.Name)..."
