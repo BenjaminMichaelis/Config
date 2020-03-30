@@ -37,6 +37,8 @@ Function GitConfigure {
 
     choco install hub -y
 
+    # TODO: Check if already configured.
+    # TODO: Remove hard coding if the information.
     git config --gloal user.name "Mark Michaelis"
     git config --global user.email "Mark@IntelliTect.com"
 }
