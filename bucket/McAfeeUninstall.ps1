@@ -3,12 +3,10 @@
 
 Function Uninstall-McAfeeApplications {
     
-    $infos = $null
-    $infos += Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* |
-    Where-object { $null -ne $_.DisplayName -and $_.SystemComponent -ne "1" } #| select DisplayName, Publisher, DisplayVersion, Uninstall
-    $infos | Where-Object { $_.DisplayName -like '*McAfee*' } | ForEach-Object {
+    Get-Program 'McAfee*' | ForEach-Object {
         try {
-            $installedMsiObject.UnInstall()
+            Write-Host "Uninstalling $($_.Name)..."
+            $_.UnInstall()
         }
         catch {
             Write-Error "Error occurred: $_"
