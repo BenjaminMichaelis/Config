@@ -5,7 +5,6 @@ Write-Host "Uninstalling McAfee Applications..."
 
 Function Uninstall-McAfeeApplications {
     Write-Host "Running $($MyInvocation.MyCommand.Name)..."
-    Get-Program 'McAfee*'
     Get-Program 'McAfee*' | ForEach-Object {
         try {
             Write-Host "Uninstalling $($_.Name)..."
@@ -14,7 +13,15 @@ Function Uninstall-McAfeeApplications {
             $UninstallExecutible = $UninstallCmd.substring(0, $UninstallCmd.IndexOf(".exe") + 4 )
             # Any parts after the .exe		
             $UninstallArguments = $UninstallCmd.substring($UninstallCmd.IndexOf(".exe") + 4 )
-            Start-Process -FilePath "$UninstallExecutible" -ArgumentList "$UninstallArguments" -Wait -Passthru
+            $parms = @{
+                "FilePath" = "$UninstallExecutible";
+                "Wait"     = $true;
+                "PassThru" = $true;
+            }
+            if (-not [string]::IsNullOrWhiteSpace($UninstallArguments)) {
+                $parms.Add("ArgumentList", "$UninstallArguments")
+            }
+            Start-Process @parms
         }
         catch {
             Write-Error "Error occurred: $_"
