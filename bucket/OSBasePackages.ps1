@@ -4,6 +4,7 @@ Write-Host 'Installing and configuring OSBasePackages...'
 
 '7zip', 'notepad2', 'Everything', 'GoogleChrome', 'SysInternals', 'WinDirStat', `
     'microsoft-windows-terminal', 'fzf' | Where-Object {
+    Write-Host "Testing for install of chocolatey pacakge $_ $(Test-ChocolateyPackageInstalled $_)..."
     -not (Test-ChocolateyPackageInstalled $_)
 } | ForEach-Object { 
     Write-Host "Installing $_..."
