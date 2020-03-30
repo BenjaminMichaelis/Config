@@ -6,7 +6,7 @@
     "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/McAfeeUninstall.ps1",
     "http://us.mcafee.com/apps/supporttools/mcpr/mcpr.asp#/MCPR.exe"
   ],
-  "pre_install": "& McAfeeUninstall.ps1",
+  "pre_install": "& 'McAfeeUninstall.ps1'",
   "installer": {
     "file": "MCPR.exe"
   }
