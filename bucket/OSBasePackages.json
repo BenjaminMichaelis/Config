@@ -5,6 +5,6 @@
         "https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket/OSBasePackages.ps1"
     ],
     "installer": {
-        "file": ""
+        "file": "OSBasePackages.ps1"
     }
 }
