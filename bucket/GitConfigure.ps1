@@ -36,5 +36,8 @@ Function GitConfigure {
     choco install gitkraken -y
 
     choco install hub -y
+
+    git config --gloal user.name "Mark Michaelis"
+    git config --global user.email "Mark@IntelliTect.com"
 }
 GitConfigure
