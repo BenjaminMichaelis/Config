@@ -1,5 +1,6 @@
 
-. $PSScriptRoot\Utils.ps1
+. "$PSScriptRoot\Utils.ps1"
+. "$PSScriptRoot\GitIntegrationWithBeyondCompare.ps1"
 
 Function GitConfigure {
     Write-Host "Running $($MyInvocation.MyCommand.Name)..."
@@ -39,7 +40,11 @@ Function GitConfigure {
 
     # TODO: Check if already configured.
     # TODO: Remove hard coding if the information.
-    git config --gloal user.name "Mark Michaelis"
-    git config --global user.email "Mark@IntelliTect.com"
+    if (-not (git config --global user.name)) {
+        git config --global user.name "Mark Michaelis"
+    }
+    if (-not (git config --global user.email)) {
+        git config --global user.email "Mark@IntelliTect.com"
+    }
 }
 GitConfigure
