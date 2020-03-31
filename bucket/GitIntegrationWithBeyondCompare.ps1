@@ -3,7 +3,7 @@
 
 
 Function Invoke-GitIntegrationWithBeyondCompare {
-    Write-Warning: "Integration with Beyond Compare is not working below."
+    Write-Warning "Integration with Beyond Compare is not working below."
     $beyondComparePath = "${env:ProgramFiles}\Beyond Compare 4\BComp.exe"
     if ( (Test-Path $beyondComparePath) -AND (Get-Command git -ErrorAction Ignore) ) {
         git config --global diff.tool bc
