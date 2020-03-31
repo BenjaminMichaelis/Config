@@ -1,5 +1,5 @@
 
-. $PSScriptRoot\Utils.ps1
+. "$PSScriptRoot\Utils.ps1"
 
 
 Function Invoke-GitIntegrationWithBeyondCompare {

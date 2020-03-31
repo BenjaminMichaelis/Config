@@ -1,6 +1,6 @@
 Write-Host 'Installing and configuring Chocolatey...'
 
-. $PSScriptRoot\Utils.ps1
+. "$PSScriptRoot\Utils.ps1"
 
 Function Install-Chocolatey {
     
@@ -23,9 +23,9 @@ Function Install-Chocolatey {
         Get-Content C:\data\Profile\ChocolateyAPIKey.txt | Foreach-Object { choco setapikey $_ }
     }
 
-    choco install chocolatey.extension
+    choco install chocolatey-core.extension -y
 
-    choco install au # Automatic Chocolatey Package Update
+    choco install au -y # Automatic Chocolatey Package Update
 
     if (Test-Path C:\Dropbox\Profile\chocolatey.license.xml) {
         [string]$chocolateyLicenseFolder = (Join-Path "$env:ChocolateyInstall" 'License')
