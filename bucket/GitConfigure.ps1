@@ -27,9 +27,11 @@ Function GitConfigure {
     Invoke-GitIntegrationWithBeyondCompare
 
     git config --global push.default simple
-    git config --global color.status.untracked bold
-    git config --global color.status.changed bold
-    git config --global color.branch.remote bold
+    git config --global color.status.untracked "red normal bold"
+    git config --global color.status.changed "red normal bold"
+    git config --global color.branch.remote bold # equivalent to yellow normal bold
+    git config --global color.diff.old "red normal bold"
+    git config --global color.diff.new "green normal bold"
 
     choco install git-credential-manager-for-windows -y
 
