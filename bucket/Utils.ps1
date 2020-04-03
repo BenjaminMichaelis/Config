@@ -6,7 +6,6 @@ Function Test-Command {
     return [bool](get-command $command -ErrorAction Ignore)
 }
 
-
 # TODO: Consider writing as a filter.
 Function Test-ChocolateyPackageInstalled {
     [CmdletBinding()]
@@ -16,11 +15,27 @@ Function Test-ChocolateyPackageInstalled {
     )
 
     [bool] $installed = choco list $PackageName --local-only --no-progress | Where-Object {
-        $_ -match "$PackageName\s.*"
-        # Alternative Filter
+        # Alternate filter
         #choco list  -localonly | Where-Object { ($_ -notmatch 'Chocolatey v[0-9\.]') -and $_ -notmatch '\d+ packages installed\.' }
+        $_ -match "$PackageName\s.*"
     }
     Write-Output $installed
+}
+
+Function Test-ScoopPackageInstalled {
+    [CmdletBinding()]
+    [OutputType([bool])]
+    param(
+        [Parameter(Mandatory)][string]$PackageName
+    )
+
+    $scoopOutput = scoop export $PackageName
+    $installed = $scoopOutput | Where-Object {
+        # Alternate filter
+        #choco list  -localonly | Where-Object { ($_ -notmatch 'Chocolatey v[0-9\.]') -and $_ -notmatch '\d+ packages installed\.' }
+        $_ -match "\s*$PackageName\s.*"
+    } 
+    Write-Output (@($installed).Count -gt 0)
 }
 
 Function Get-Program {
