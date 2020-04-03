@@ -1,9 +1,13 @@
 
 . "$PSScriptRoot\Utils.ps1"
 
-if(-not (Test-ChocolateyPackageInstalled 'Office365ProPlus')) {
+#if(-not (Test-ChocolateyPackageInstalled 'Office365ProPlus')) {
     choco install Office365ProPlus -y
-}
+#}
+
+#if(-not (Test-ChocolateyPackageInstalled 'Microsoft-Teams')) {
+    choco install Microsoft-Teams -y
+#}
 
 Function Get-Office365TenantId {
     [OutputType([string])]
@@ -18,9 +22,13 @@ Function Get-Office365TenantId {
 }
 
 Function Set-OneDriveConfig {
-    new-item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\OneDrive' 
 
-    New-Item -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir'
+    if(-not (Test-Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive')) {
+        New-Item -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive'
+    }
+    if(-not (Test-Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir')) {
+        New-Item -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir'
+    }
     # TOTO: Remove hardcoding
     Set-ItemProperty -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir' -Name "$(Get-Office365TenantId 'IntelliTectSP')" -Value "C:\OneDrive\IntelliTect"
     Set-ItemProperty -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir' -Name "$(Get-Office365TenantId 'Michaelises')" -Value "C:\OneDrive\Michaelises"
