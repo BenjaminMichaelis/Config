@@ -8,23 +8,23 @@ Function Test-Command {
 
 # TODO: Consider writing as a filter.
 Function Test-ChocolateyPackageInstalled {
-    [CmdletBinding()]
     [OutputType([bool])]
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$PackageName
     )
 
-    [bool] $installed = choco list $PackageName --local-only --no-progress | Where-Object {
+    $installed = choco list $PackageName --local-only --no-progress | Where-Object {
         # Alternate filter
         #choco list  -localonly | Where-Object { ($_ -notmatch 'Chocolatey v[0-9\.]') -and $_ -notmatch '\d+ packages installed\.' }
         $_ -match "$PackageName\s.*"
     }
-    Write-Output $installed
+    Write-Output (@($installed).Count -gt 0)
 }
 
 Function Test-ScoopPackageInstalled {
-    [CmdletBinding()]
     [OutputType([bool])]
+    [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$PackageName
     )
@@ -34,9 +34,34 @@ Function Test-ScoopPackageInstalled {
         # Alternate filter
         #choco list  -localonly | Where-Object { ($_ -notmatch 'Chocolatey v[0-9\.]') -and $_ -notmatch '\d+ packages installed\.' }
         $_ -match "\s*$PackageName\s.*"
-    } 
+    }
     Write-Output (@($installed).Count -gt 0)
 }
+
+function choco {
+    [bool]$cmd = $false
+    foreach($arg in $args) {
+        if($arg -in '-f','--force') {
+            break;
+        }
+        if($arg -notlike '-*') {
+            if($null -eq $cmd) {
+                $cmd = $arg
+            }
+            elseif ($cmd -eq 'install') {
+                ## $arg is the application to install
+                if(Test-ChocolateyPackageInstalled $arg) {
+                    Write-Warning "$arg is already installed."
+                }
+                else {
+                    # Invoke chocolatey
+                    choco.exe @args
+                }
+            }
+        }
+    }
+}
+
 
 Function Get-Program {
     [CmdletBinding()] param([string] $Filter = "*") 
@@ -59,8 +84,7 @@ Function Get-Program {
                 $_.PSChildName 
             } 
         }
-    } | 
-    Where-Object { ($_.Name -Like $Filter) -or ($_.PSChildName -Like $Filter) } 
+    } | Where-Object { ($_.Name -Like $Filter) -or ($_.PSChildName -Like $Filter) } 
 }
 
 Function Import-ChocolateyModule {

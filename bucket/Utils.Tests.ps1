@@ -14,16 +14,12 @@ Installed apps matching 'MyMockApp':
   MyMockApp 1.00.001 *global* [C:\Users\mark\AppData\Local\Temp\MicrosoftOffice365.json]
 "@ } `
 -ParameterFilter { 
-    Write-Host 'Inside ParaeterFilter'
     foreach($arg in $args)
     {
-        Write-Host 'Inside ParaeterFilter=>foreach'
         if ($arg -notlike '-*')  {
-            Write-Host 'Inside ParaeterFilter=>foreach=>if'
             return ($arg -eq 'export') 
         }
     }
-    Write-Host 'Inside ParaeterFilter=>after foreach'
     return $true
 }
 
