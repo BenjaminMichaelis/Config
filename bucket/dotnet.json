@@ -1,0 +1,10 @@
+﻿{
+    "$schema": "https://raw.githubusercontent.com/lukesampson/scoop/master/schema.json",
+    "version": "1.0.000",
+    "url": ["https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/blank"],
+    "installer": {
+        "script": [
+            "choco install dotnetcore -y;choco install dotnetcore-sdk -y;choco install dotnetcore-sdk -pre -y"
+        ]
+    }
+}
