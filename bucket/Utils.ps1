@@ -1,3 +1,10 @@
+
+# TODO: Generalize
+$UserBucket = "MarkMichaelis"
+
+$currentScoopDirectory = "$env:SCOOP\apps\scoop\current\"
+. "$currentScoopDirectory\libexec\scoop-search.ps1" > $null
+
 Function Test-Command {
     [CmdletBinding()]
     param(
@@ -61,7 +68,77 @@ function choco {
         }
     }
 }
+ 
+function Get-LocalBucket {
+    <#
+    .SYNOPSIS
+        List all local buckets.
+    #>
 
+    $bucketsdir = (Join-Path $env:scoop buckets)
+    if($bucketsdir -ne (Split-Path (Find-BucketDirectory).Trim('bucket') -Parent)) {
+        Write-Warning 'Bucket direcotry doesn''t match Find-BucketDirectory location.'
+    }
+    $buckets = (Get-ChildItem $bucketsdir -Directory).Name
+    if($UserBucket) {
+        $buckets = ,$UserBucket + ($buckets | Where-Object { $_ -ne $UserBucket })
+    }
+    Write-Output $buckets
+}
+
+function Get-ScoopArgs {
+    return [PSCustomObject]@{
+        'Args' = $args;
+        'Options' = $args | Where-Object { $_ -like '-*'};
+        'Cmds' = $args | Where-Object { $_ -notlike '-*'} 
+        'Cmd' =  $cmds | Select-Object -First 1;
+        'Arg1' = $cmds | Select-Object -Skip 1 | Select-Object -First 1
+    }
+}
+
+
+function scoop {
+    $localArgs = $args
+    $cmds = $args | Where-Object { $_ -notlike '-*'} 
+    $options = $args | Where-Object { $_ -like '-*'}
+    $cmd = $cmds | Select-Object -First 1
+    $arg1 = $cmds | Select-Object -Skip 1 | Select-Object -First 1
+
+    switch ($cmd) {
+        'install' {  
+            #Make the $UserBucket the priority.
+            $null, $bucket, $null = parse_app $arg1
+            if(-not $bucket) {
+                scoop search $arg1 -PSCustomObject | Where-Object {
+                    $_.name -match "^$args$" 
+                } | Where-Object { 
+                        $_.Bucket -eq $UserBucket 
+                } | ForEach-Object {
+                    $index = [array]::indexof($localArgs,$_.name)
+                    $localArgs[$index] = "$UserBucket/$arg1"
+                } 
+            }
+            scoop.ps1 @localArgs
+        }
+        'search' {
+            if($options -contains '-PSCustomObject') {
+                Get-LocalBucket | ForEach-Object {
+                    $bucket = $_
+                    search_bucket $_ $arg1 | ForEach-Object {
+                        $_['Bucket'] = $bucket 
+                        Write-Output ([PSCustomObject]$_)
+                    }
+                }
+            }
+            else {
+                scoop.ps1 @args
+            }
+        }
+        Default {
+            scoop.ps1 @args   
+        }
+    }   
+}
 
 Function Get-Program {
     [CmdletBinding()] param([string] $Filter = "*") 
