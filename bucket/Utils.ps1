@@ -87,10 +87,12 @@ function Get-LocalBucket {
 }
 
 function Get-ScoopArgs {
+    $cmds = $args | Where-Object { $_ -notlike '-*'}
+
     return [PSCustomObject]@{
         'Args' = $args;
         'Options' = $args | Where-Object { $_ -like '-*'};
-        'Cmds' = $args | Where-Object { $_ -notlike '-*'} 
+        'Cmds' = $cmds 
         'Cmd' =  $cmds | Select-Object -First 1;
         'Arg1' = $cmds | Select-Object -Skip 1 | Select-Object -First 1
     }
@@ -98,11 +100,12 @@ function Get-ScoopArgs {
 
 
 function scoop {
-    $localArgs = $args
-    $cmds = $args | Where-Object { $_ -notlike '-*'} 
-    $options = $args | Where-Object { $_ -like '-*'}
-    $cmd = $cmds | Select-Object -First 1
-    $arg1 = $cmds | Select-Object -Skip 1 | Select-Object -First 1
+    $scoopArgs = Get-ScoopArgs @args
+    $localArgs = $scoopArgs.Args
+    $cmd = $scoopArgs.Cmd
+    $options = $scoopArgs.Options
+    $cmd = $scoopArgs.Cmd
+    $arg1 = $scoopArgs.Arg1
 
     switch ($cmd) {
         'install' {  

@@ -3,30 +3,38 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests', '')
 . "$PSScriptRoot\$sut"
 
 Describe "Test-ScoopPackageInstalled" {
+    $mockExistingAppName = 'MyMockApp'
+    $mockMissingAppName = 'MyMockMissingApp'
+
     Mock scoop.ps1 { 
         Write-Output @"
-Installed apps matching 'MyMockApp':
+Installed apps matching '$mockExistingAppName':
 
-  MyMockApp 1.00.001 [C:\Users\mark\AppData\Local\Temp\MicrosoftOffice365.json]
-  MyMockApp 1.00.001 *global* [C:\Users\mark\AppData\Local\Temp\MicrosoftOffice365.json]
+  $mockExistingAppName 1.00.001 [...\Temp\MyMockApp.json]
+  $mockExistingAppName 1.00.001 *global* [...\Temp\MyMockApp.json]
 "@ } `
 -ParameterFilter { 
-    foreach($arg in $args)
-    {
-        if ($arg -notlike '-*')  {
-            return ($arg -eq 'export') 
-        }
-    }
-    return $true
+    $scoopArgs = Get-ScoopArgs @args
+    return (($scoopArgs.Cmd -eq 'export'))
 }
 
-    it "MyMockApp is installed " {
-        Test-ScoopPackageInstalled 'MyMockApp' | Should Be $true
+    it "$mockExistingAppName is installed " {
+        Test-ScoopPackageInstalled $mockExistingAppName | Should Be $true
     }
-    it "MicrosoftOffice365 is NOT installed " {
-        Test-ScoopPackageInstalled 'MicrosoftOffice365' | Should Be $false
+    it "$mockMissingAppName is NOT installed " {
+        Test-ScoopPackageInstalled $mockMissingAppName | Should Be $false
     }
 }
+
+Describe 'Get-ScoopArgs' {
+    It 'install stuff' {
+        $scoopArgs = Get-ScoopArgs install stuff
+        $scoopArgs.Cmd | Should Be 'install'
+        $scoopArgs.Arg1 | Should Be 'stuff'
+    }
+}
+
+
 
 Describe 'scoop search wrapper' {
     [bool]$script:firstBucket=$true
@@ -68,13 +76,8 @@ Describe 'scoop install wrapper' {
     Mock scoop.ps1 { 
         Write-Output "$args" } `
 -ParameterFilter { 
-    foreach($arg in $args)
-    {
-        if ($arg -notlike '-*')  {
-            return ($arg -eq 'install') 
-        }
-    }
-    return $false
+    $scoopArgs = Get-ScoopArgs @args
+    return (($scoopArgs.Cmd -eq 'install'))
 }
     
     It 'scoop install ' {
