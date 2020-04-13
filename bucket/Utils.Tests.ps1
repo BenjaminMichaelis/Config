@@ -14,8 +14,8 @@ Installed apps matching '$mockExistingAppName':
   $mockExistingAppName 1.00.001 *global* [...\Temp\MyMockApp.json]
 "@ } `
 -ParameterFilter { 
-    $scoopArgs = Get-ScoopArgs @args
-    return (($scoopArgs.Cmd -eq 'export'))
+    $scoopArgs = Get-InstallArgs @args
+    return (($scoopArgs.Action -eq 'export'))
 }
 
     it "$mockExistingAppName is installed " {
@@ -26,10 +26,10 @@ Installed apps matching '$mockExistingAppName':
     }
 }
 
-Describe 'Get-ScoopArgs' {
+Describe 'Get-InstallArgs' {
     It 'install stuff' {
-        $scoopArgs = Get-ScoopArgs install stuff
-        $scoopArgs.Cmd | Should Be 'install'
+        $scoopArgs = Get-InstallArgs install stuff
+        $scoopArgs.Action | Should Be 'install'
         $scoopArgs.Arg1 | Should Be 'stuff'
     }
 }
@@ -76,8 +76,8 @@ Describe 'scoop install wrapper' {
     Mock scoop.ps1 { 
         Write-Output "$args" } `
 -ParameterFilter { 
-    $scoopArgs = Get-ScoopArgs @args
-    return (($scoopArgs.Cmd -eq 'install'))
+    $scoopArgs = Get-InstallArgs @args
+    return (($scoopArgs.Action -eq 'install'))
 }
     
     It 'scoop install ' {

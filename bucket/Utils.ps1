@@ -86,25 +86,56 @@ function Get-LocalBucket {
     Write-Output $buckets
 }
 
-function Get-ScoopArgs {
-    $cmds = $args | Where-Object { $_ -notlike '-*'}
-
-    return [PSCustomObject]@{
-        'Args' = $args;
-        'Options' = $args | Where-Object { $_ -like '-*'};
-        'Cmds' = $cmds 
-        'Cmd' =  $cmds | Select-Object -First 1;
-        'Arg1' = $cmds | Select-Object -Skip 1 | Select-Object -First 1
-    }
+class InstallArgs {
+    [string[]]$OriginalArgs
+    [string[]]$Options
+    [string[]]$SubCommands
+    [string]$Action
+    [string]$Arg1
 }
 
 
+<#
+.SYNOPSIS
+# Parse out the arguments used on a command
+
+.DESCRIPTION
+# Given a command, parse out the original arguments into options, "actions", and 
+# additional argumenst for the action.  The assumption
+# is that the first argument is the commad, e.g. choco install.  The remaining 
+# arguments are arguments for the command, e.g. choco install 'VisualStudio'.  All
+# original arguments beginning with a dash ('-'), are parsed as options
+# to the action.
+
+.EXAMPLE
+choco install VisualStudio -y --force
+
+.NOTES
+The function should work for both scoop and chocolatey (choco), or any other
+command broken into <original command> <command> <arguments> <options> where
+RootCommand: The original command invoked. (This value is not parsed out.)
+OriginalArgs: The complete list of original arguments, including actions
+and options.
+SubCommands: The first original argument that is not an option.
+Options: All original arguments that begin with a dash.
+#>
+function Get-InstallArgs {
+    $subCommands = $args | Where-Object { $_ -notlike '-*'}
+
+    return [PSCustomObject]@{
+        'OriginalArgs' = $args;
+        'Options' = $args | Where-Object { $_ -like '-*'};
+        'SubCommands' = $subCommands 
+        'Action' =  $subCommands | Select-Object -First 1;
+        'Arg1' = $subCommands | Select-Object -Skip 1 | Select-Object -First 1
+    }
+}
+
 function scoop {
-    $scoopArgs = Get-ScoopArgs @args
-    $localArgs = $scoopArgs.Args
-    $cmd = $scoopArgs.Cmd
+    $scoopArgs = Get-InstallArgs @args
+    $localArgs = $scoopArgs.OriginalArgs
+    $cmd = $scoopArgs.Action
     $options = $scoopArgs.Options
-    $cmd = $scoopArgs.Cmd
     $arg1 = $scoopArgs.Arg1
 
     switch ($cmd) {
