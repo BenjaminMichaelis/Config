@@ -26,9 +26,14 @@ Function GitConfigure {
 
     Invoke-GitIntegrationWithBeyondCompare
 
-    git config --global push.default simple
+    git config --global color.ui 'auto'
+    git config --global push.default 'simple'
     git config --global color.status.untracked "red normal bold"
     git config --global color.status.changed "red normal bold"
+    git config --global color.status.add "green normal bold"
+    git config --global color.status.added "green normal bold"
+    git config --global color.status.updated "green normal bold"
+    git config --global color.branch.current "green normal bold"
     git config --global color.branch.remote bold # equivalent to yellow normal bold
     git config --global color.diff.old "red normal bold"
     git config --global color.diff.new "green normal bold"
