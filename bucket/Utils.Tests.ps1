@@ -2,6 +2,67 @@
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests', '')
 . "$PSScriptRoot\$sut"
 
+Describe 'Test-ChocolateyPackageInstalled' {
+    $mockInstalledPackageName = 'MyMockPackage'
+    Mock choco.exe {
+        Write-Output "Chocolatey v0.10.15"
+        $installArgs = Get-InstallArgs @args
+        if($installArgs.Arg1 -eq $mockInstalledPackageName) {
+            Write-Output @"
+chocolatey 0.10.15
+$mockInstalledPackageName 1.1.2.20161210
+"@
+        }
+        Write-Output "2 packages installed."
+    } -ParameterFilter { 
+        $installArgs = Get-InstallArgs @args
+        return (($installArgs.Action -eq 'list'))
+    }
+    
+    It "$mockInstalledPackageName IS installedd" {
+        Test-ChocolateyPackageInstalled $mockInstalledPackageName | Should Be $true
+    }
+    It "$mockInstalledPackageName is NOT installedd" {
+        Test-ChocolateyPackageInstalled 'NotInstalledMockPackageNAme' | Should Be $false
+    }
+}
+
+Describe 'choco install' {
+    $previouslyInstalledPackage = 'MyMockPackage'
+    Mock choco.exe {
+        $installArgs = Get-InstallArgs @args
+        switch($installArgs.Action) 
+        {
+            'install' {
+                Write-Output "Installing $($installArgs.Arg1)"
+            }
+            'list' {
+                Write-Output "Chocolatey v0.10.15"
+                if($installArgs.Arg1 -eq $previouslyInstalledPackage) {
+                    Write-Output @"
+chocolatey 0.10.15
+$previouslyInstalledPackage 1.1.2.20161210
+"@
+                }
+                Write-Output "2 packages installed."
+            }
+            Default {
+                throw 'Invalid operation: Parameter filter should prevent getting here.'
+            }
+        }
+    } -ParameterFilter { 
+        $installArgs = Get-InstallArgs @args
+        return (($installArgs.Action -in 'install','list'))
+    }
+    
+    It "choco install $previouslyInstalledPackage" {
+        choco install  $previouslyInstalledPackage 3>&1 | Should Be "$previouslyInstalledPackage is already installed."
+    }
+    It "choco install NewSamplePackage" {
+        choco install NewSamplePackage | Should Be 'Installing NewSamplePackage'
+    }
+}
+
 Describe "Test-ScoopPackageInstalled" {
     $mockExistingAppName = 'MyMockApp'
     $mockMissingAppName = 'MyMockMissingApp'
@@ -12,11 +73,10 @@ Installed apps matching '$mockExistingAppName':
 
   $mockExistingAppName 1.00.001 [...\Temp\MyMockApp.json]
   $mockExistingAppName 1.00.001 *global* [...\Temp\MyMockApp.json]
-"@ } `
--ParameterFilter { 
-    $scoopArgs = Get-InstallArgs @args
-    return (($scoopArgs.Action -eq 'export'))
-}
+"@ } -ParameterFilter { 
+        $scoopArgs = Get-InstallArgs @args
+        return (($scoopArgs.Action -eq 'export'))
+    }
 
     it "$mockExistingAppName is installed " {
         Test-ScoopPackageInstalled $mockExistingAppName | Should Be $true
@@ -33,7 +93,6 @@ Describe 'Get-InstallArgs' {
         $scoopArgs.Arg1 | Should Be 'stuff'
     }
 }
-
 
 
 Describe 'scoop search wrapper' {

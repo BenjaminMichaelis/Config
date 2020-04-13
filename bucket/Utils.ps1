@@ -46,28 +46,20 @@ Function Test-ScoopPackageInstalled {
 }
 
 function choco {
-    [bool]$cmd = $false
-    foreach($arg in $args) {
-        if($arg -in '-f','--force') {
-            break;
-        }
-        if($arg -notlike '-*') {
-            if($null -eq $cmd) {
-                $cmd = $arg
-            }
-            elseif ($cmd -eq 'install') {
-                ## $arg is the application to install
-                if(Test-ChocolateyPackageInstalled $arg) {
-                    Write-Warning "$arg is already installed."
-                }
-                else {
-                    # Invoke chocolatey
-                    choco.exe @args
-                }
-            }
-        }
+    $installArgs = Get-InstallArgs @args
+    if(
+        ($installArgs.Action -eq 'install') `
+        -and ($installArgs.Options -notcontains '-f') `
+        -and ($installArgs.Options -notcontains '--force') `
+        -and (Test-ChocolateyPackageInstalled $installArgs.Arg1)
+        ) {
+        Write-Warning "$($installArgs.Arg1) is already installed."
+    }
+    else {
+        choco.exe @args
     }
 }
+
  
 function Get-LocalBucket {
     <#
@@ -86,15 +78,6 @@ function Get-LocalBucket {
     Write-Output $buckets
 }
 
-class InstallArgs {
-    [string[]]$OriginalArgs
-    [string[]]$Options
-    [string[]]$SubCommands
-    [string]$Action
-    [string]$Arg1
-}
-
-
 <#
 .SYNOPSIS
 # Parse out the arguments used on a command
@@ -111,28 +94,38 @@ class InstallArgs {
 choco install VisualStudio -y --force
 
 .NOTES
-The function should work for both scoop and chocolatey (choco), or any other
-command broken into <original command> <command> <arguments> <options> where
-RootCommand: The original command invoked. (This value is not parsed out.)
-OriginalArgs: The complete list of original arguments, including actions
-and options.
-SubCommands: The first original argument that is not an option.
-Options: All original arguments that begin with a dash.
+The class should work for both scoop and chocolatey (choco), or any other
+command broken into <original command> <subcommand> <arguments> <options>.
 #>
-function Get-InstallArgs {
-    $subCommands = $args | Where-Object { $_ -notlike '-*'}
+class InstallArgs {
+    # The complete list of original arguments, including actions and options.
+    [string[]]$OriginalArgs
+    # All original arguments that begin with a dash.
+    [string[]]$Options
+    # All the original arguments that didn't begin with a dash.
+    [string[]]$SubCommands
+    # The first original argument that is not an option.
+    [string]$Action
+    # The first SubCommand that isn't an action (in other words the second subcommand)
+    [string]$Arg1
 
-    return [PSCustomObject]@{
-        'OriginalArgs' = $args;
-        'Options' = $args | Where-Object { $_ -like '-*'};
-        'SubCommands' = $subCommands 
-        'Action' =  $subCommands | Select-Object -First 1;
-        'Arg1' = $subCommands | Select-Object -Skip 1 | Select-Object -First 1
+    InstallArgs([string[]]$OriginalArgs) {
+        [string[]]$localSubCommands = $OriginalArgs | Where-Object { $_ -notlike '-*'}
+        $this.OriginalArgs = $OriginalArgs
+        $this.Options = $OriginalArgs | Where-Object { $_ -like '-*'};
+        $this.SubCommands = $localSubCommands 
+        $this.Action =  $localSubCommands | Select-Object -First 1;
+        $this.Arg1 = $localSubCommands | Select-Object -Skip 1 | Select-Object -First 1
     }
 }
 
+
+function Get-InstallArgs {
+    return [InstallArgs]::new($args)
+}
+
 function scoop {
-    $scoopArgs = Get-InstallArgs @args
+    [InstallArgs]$scoopArgs = Get-InstallArgs @args
     $localArgs = $scoopArgs.OriginalArgs
     $cmd = $scoopArgs.Action
     $options = $scoopArgs.Options
