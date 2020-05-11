@@ -4,7 +4,7 @@
     "url": ["https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/blank"],
     "installer": {
         "script": [
-            "powercfg / HIBERNATE ON"
+            "powercfg /HIBERNATE ON"
         ]
     }
 }
