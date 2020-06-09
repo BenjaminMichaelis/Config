@@ -1,6 +1,6 @@
 
 # TODO: Generalize
-$UserBucket = "MarkMichaelis"
+$UserBucket = "BenjaminMichaelis"
 
 $currentScoopDirectory = "$env:SCOOP\apps\scoop\current\"
 . "$currentScoopDirectory\libexec\scoop-search.ps1" > $null
