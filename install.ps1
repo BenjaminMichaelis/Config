@@ -40,4 +40,4 @@ function Add-ScoopBucket {
     Write-Information -MessageData "Scoopbucket $name is already added."
   }
 }
-Add-ScoopBucket -Name 'MarkMichaelis' -Url 'https://github.com/MarkMichaelis/ScoopBucket'
+Add-ScoopBucket -Name 'BenjaminMichaelis' -Url 'https://github.com/BenjaminMichaelis/ScoopBucket'

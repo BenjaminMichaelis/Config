@@ -12,7 +12,7 @@ Describe Install-McAfeeUninstall {
         $manifestJson = Get-Content $manifestPath
         $manifest = $manifestJson | ConvertFrom-Json
         $manifest.url = $manifest.url | ForEach-Object {
-            [Uri]$mockUri = $_ -replace 'https://raw.githubusercontent.com/MarkMichaelis/ScoopBucket/master/bucket', "$PSScriptRoot"
+            [Uri]$mockUri = $_ -replace 'https://raw.githubusercontent.com/BenjaminMichaelis/ScoopBucket/master/bucket', "$PSScriptRoot"
             Write-Output $mockUri.AbsoluteUri
         }
         $mockManifestPath = (Join-Path $env:TEMP (Split-Path -Leaf $manifestPath)) 

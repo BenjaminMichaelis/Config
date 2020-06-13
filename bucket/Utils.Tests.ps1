@@ -123,7 +123,7 @@ Describe 'Get-LocalBucket' {
         $localBuckets = Get-LocalBucket
         $localBuckets -contains 'main' | Should Be $true
         if($UserBucket) {
-            $localBuckets[0] | Should Be 'MarkMichaelis'
+            $localBuckets[0] | Should Be 'BenjaminMichaelis'
         }
     }
 }
