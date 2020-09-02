@@ -2,4 +2,4 @@
 
 Setups my personal scoop bucket. Installs and uninstalls programs.
 
-Runs via scoop bucket add 
+Runs via:  scoop bucket add *repoURL*
