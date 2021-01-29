@@ -48,10 +48,10 @@ Function GitConfigure {
     # TODO: Check if already configured.
     # TODO: Remove hard coding if the information.
     if (-not (git config --global user.name)) {
-        git config --global user.name "Mark Michaelis"
+        git config --global user.name "Benjamin Michaelis"
     }
     if (-not (git config --global user.email)) {
-        git config --global user.email "Mark@IntelliTect.com"
+        git config --global user.email "benjamin@michaelis.net"
     }
 }
 GitConfigure
