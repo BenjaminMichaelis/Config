@@ -2,4 +2,4 @@
 
 Setups my personal scoop bucket. Installs and uninstalls programs.
 
-Runs via:  scoop bucket add *what you want the bucket called* *repoURL*
+Runs via: `scoop bucket add BenjaminMichaelis https://github.com/BenjaminMichaelis/ScoopBucket.git`
