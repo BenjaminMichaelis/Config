@@ -2,8 +2,17 @@
 # TODO: Generalize
 $UserBucket = "BenjaminMichaelis"
 
-$currentScoopDirectory = "$env:SCOOP\apps\scoop\current\"
-. "$currentScoopDirectory\libexec\scoop-search.ps1" > $null
+if(!$env:SCOOP -and (test-path "$env:ProgramData\scoop\apps\scoop\current")) {
+    $env:SCOOP = "$env:ProgramData\scoop"
+}
+
+if($env:SCOOP) {
+    $currentScoopDirectory = "$env:SCOOP\apps\scoop\current"
+    . (Join-Path $currentScoopDirectory 'libexec\scoop-search.ps1') > $null
+}
+else {
+    Write-Warning '$env:SCOOP not found.'
+}
 
 Function Test-Command {
     [CmdletBinding()]
@@ -81,7 +90,6 @@ function Get-LocalBucket {
 <#
 .SYNOPSIS
 # Parse out the arguments used on a command
-
 .DESCRIPTION
 # Given a command, parse out the original arguments into options, "actions", and 
 # additional argumenst for the action.  The assumption
@@ -89,10 +97,8 @@ function Get-LocalBucket {
 # arguments are arguments for the command, e.g. choco install 'VisualStudio'.  All
 # original arguments beginning with a dash ('-'), are parsed as options
 # to the action.
-
 .EXAMPLE
 choco install VisualStudio -y --force
-
 .NOTES
 The class should work for both scoop and chocolatey (choco), or any other
 command broken into <original command> <subcommand> <arguments> <options>.
