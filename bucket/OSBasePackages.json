@@ -6,6 +6,6 @@
         "https://raw.githubusercontent.com/BenjaminMichaelis/ScoopBucket/master/bucket/OSBasePackages.ps1"
     ],
     "installer": {
-        "file": "OSBasePackages.ps1"
+        "script": "& \"$dir\\OSBasePackages.ps1\""
     }
 }

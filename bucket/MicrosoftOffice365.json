@@ -6,6 +6,6 @@
         "https://raw.githubusercontent.com/BenjaminMichaelis/ScoopBucket/master/bucket/MicrosoftOffice365.ps1"
     ],
     "installer": {
-        "file": "MicrosoftOffice365.ps1"
+        "script": "& \"$dir\\MicrosoftOffice365.ps1\""
     }
 }

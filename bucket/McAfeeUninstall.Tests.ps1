@@ -1,4 +1,3 @@
-
 . "$PSScriptRoot\Utils.ps1"
 $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests', '')
 . "$PSScriptRoot\$sut"

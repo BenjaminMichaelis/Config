@@ -1,4 +1,3 @@
-
 Write-Host "Uninstalling McAfee Applications..."
 
 . "$PSScriptRoot\Utils.ps1"
