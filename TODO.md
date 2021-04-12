@@ -21,3 +21,6 @@ npm install
 To Install Python stuff:
 `choco install python`
 `choco install pycharm`
+
+Add Powertoys
+`choco install powertoys`
