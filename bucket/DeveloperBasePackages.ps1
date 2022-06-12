@@ -1,7 +1,7 @@
 Write-Host 'Installing and configuring OSBasePackages...'
 . "$PSScriptRoot\Utils.ps1"
 
-'nodejs', 'vscode' | ForEach-Object { 
+'nodejs-lts', 'vscode', 'gitkraken' | ForEach-Object { 
     Write-Host "Installing $_..."
     choco install -y $_
 }
@@ -11,3 +11,6 @@ Write-Host 'Installing and configuring OSBasePackages...'
     Write-Host "Installing $_..."
     scoop install -g $_
 }
+
+Write-Host "Installing Azure CLI"
+$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
