@@ -1,7 +1,7 @@
 Write-Host 'Installing and configuring OSBasePackages...'
 . "$PSScriptRoot\Utils.ps1"
 
-'nodejs-lts', 'vscode', 'gitkraken' | ForEach-Object { 
+'nodejs-lts', 'vscode', 'gitkraken', 'ilspy', 'dnspy' | ForEach-Object { 
     Write-Host "Installing $_..."
     choco install -y $_
 }
