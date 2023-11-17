@@ -168,4 +168,11 @@ properties:
       settings:
         id: voidtools.Everything
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Kleopatra
+        allowPrerelease: true
+      settings:
+        id:  GnuPG.Gpg4win
+        source: winget
   configurationVersion: 0.2.0
