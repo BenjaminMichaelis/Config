@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+properties:
+  assertions:
+    - resource: Microsoft.Windows.Developer/OsVersion
+      directives:
+        description: Verify min OS version requirement
+        allowPrerelease: true
+      settings:
+        MinVersion: '10.0.22000'
+  resources:
+# Set Windows Settings
+    - resource: Microsoft.Windows.Developer/DeveloperMode
+      directives:
+        description: Enable Developer Mode
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+# Install Apps
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Proton VPN
+        allowPrerelease: true
+      settings:
+        id: ProtonTechnologies.ProtonVPN
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Cryptomator
+        allowPrerelease: true
+      settings:
+        id: Cryptomator.Cryptomator
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Tor Browser
+        allowPrerelease: true
+      settings:
+        id: TorProject.TorBrowser
+        source: winget
+  configurationVersion: 0.2.0
