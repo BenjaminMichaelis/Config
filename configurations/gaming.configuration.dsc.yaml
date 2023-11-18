@@ -16,6 +16,22 @@ properties:
       settings:
         Ensure: Present
 # Install Apps
+# Epic
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Epic Games Launcher
+        allowPrerelease: true
+      settings:
+        id:  EpicGames.EpicGamesLauncher
+        source: winget
+# Steam
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Steam Launcher
+        allowPrerelease: true
+      settings:
+        id:   Valve.Steam
+        source: winget
 # Rocket League
 # Fortnite
 # FPS Chess

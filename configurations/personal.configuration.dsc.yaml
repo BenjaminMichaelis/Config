@@ -86,4 +86,18 @@ properties:
       settings:
         id: KDE.digikam
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install LibreOffice
+        allowPrerelease: true
+      settings:
+        id: TheDocumentFoundation.LibreOffice
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Signal
+        allowPrerelease: true
+      settings:
+        id: OpenWhisperSystems.Signal
+        source: winget
   configurationVersion: 0.2.0
