@@ -88,6 +88,13 @@ properties:
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
+        description: Install Gimp
+        allowPrerelease: true
+      settings:
+        id: GIMP.GIMP
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
         description: Install LibreOffice
         allowPrerelease: true
       settings:
@@ -99,5 +106,12 @@ properties:
         allowPrerelease: true
       settings:
         id: OpenWhisperSystems.Signal
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Nvidia Broadcast
+        allowPrerelease: true
+      settings:
+        id: Nvidia.Broadcast
         source: winget
   configurationVersion: 0.2.0

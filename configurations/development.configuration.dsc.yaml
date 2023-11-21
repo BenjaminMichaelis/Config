@@ -173,6 +173,20 @@ properties:
         description: Install Kleopatra
         allowPrerelease: true
       settings:
-        id:  GnuPG.Gpg4win
+        id: GnuPG.Gpg4win
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Github CLI
+        allowPrerelease: true
+      settings:
+        id: GitHub.cli
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install NuGet Package Explorer
+        allowPrerelease: true
+      settings:
+        id: 9WZDNCRDMDM3
+        source: msstore
   configurationVersion: 0.2.0

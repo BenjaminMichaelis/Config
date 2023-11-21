@@ -15,6 +15,14 @@ properties:
         allowPrerelease: true
       settings:
         Ensure: Present
+# Install GPU Applications
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Nvidia GeForce Experience
+        allowPrerelease: true
+      settings:
+        id: Nvidia.GeForceExperience
+        source: winget
 # Install Apps
 # Epic
     - resource: Microsoft.WinGet.DSC/WinGetPackage
@@ -22,7 +30,7 @@ properties:
         description: Install Epic Games Launcher
         allowPrerelease: true
       settings:
-        id:  EpicGames.EpicGamesLauncher
+        id: EpicGames.EpicGamesLauncher
         source: winget
 # Steam
     - resource: Microsoft.WinGet.DSC/WinGetPackage
@@ -30,9 +38,9 @@ properties:
         description: Install Steam Launcher
         allowPrerelease: true
       settings:
-        id:   Valve.Steam
+        id: Valve.Steam
         source: winget
-# Rocket League
+# Rocket League / BakkesMod
 # Fortnite
 # FPS Chess
 # Firestorm?
