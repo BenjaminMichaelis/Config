@@ -59,6 +59,13 @@ properties:
       settings:
         id: Docker.DockerDesktop
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Git LFS
+        allowPrerelease: true
+      settings:
+        id: GitHub.GitLFS
+        source: winget
 # Install Development Applications
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
