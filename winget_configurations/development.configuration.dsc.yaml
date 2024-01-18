@@ -136,14 +136,6 @@ properties:
         id: KirillOsenkov.MSBuildStructuredLogViewer
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: nugetPkgExplr
-      directives:
-        description: Install NuGet Package Explorer
-        allowPrerelease: true
-      settings:
-        id: 9WZDNCRDMDM3
-        source: msstore
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: windowsTerminal
       directives:
         description: Install Windows Terminal
