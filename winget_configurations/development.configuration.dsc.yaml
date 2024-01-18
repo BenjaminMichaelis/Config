@@ -143,6 +143,14 @@ properties:
       settings:
         id: Microsoft.WindowsTerminal
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: ssms
+      directives:
+        description: Install SSMS
+        allowPrerelease: true
+      settings:
+        id: Microsoft.SQLServerManagementStudio
+        source: winget   
 # Utilities
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: obsStudio
