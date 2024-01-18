@@ -188,4 +188,25 @@ properties:
       settings:
         id: 9WZDNCRDMDM3
         source: msstore
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Chrome
+        allowPrerelease: true
+      settings:
+        id: Google.Chrome
+        source: msstore
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Firefox
+        allowPrerelease: true
+      settings:
+        id: Mozilla.Firefox
+        source: msstore
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Brave
+        allowPrerelease: true
+      settings:
+        id: Brave.Brave
+        source: msstore
   configurationVersion: 0.2.0
