@@ -19,4 +19,5 @@ zerotier
 
 
 TODO:
-Turn on clipboard history
+- Turn on clipboard history
+- Turn on Sandbox
