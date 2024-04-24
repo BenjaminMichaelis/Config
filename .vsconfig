@@ -147,6 +147,9 @@
       "https://marketplace.visualstudio.com/items?itemName=MadsKristensen.OpeninVisualStudioCode",
       "https://marketplace.visualstudio.com/items?itemName=idex.vsthemepack",
       "https://marketplace.visualstudio.com/items?itemName=PeterMacej.MultilineSearchandReplace",
-      "https://marketplace.visualstudio.com/items?itemName=mhutch.MSBuildEditor"
+      "https://marketplace.visualstudio.com/items?itemName=mhutch.MSBuildEditor",
+      "https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.MatchMargin2022",
+      "https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.MiddleClickScroll2022",
+      "https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.TimeStampMargin2022"
   ]
 }
