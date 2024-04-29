@@ -153,14 +153,6 @@ properties:
         source: winget   
 # Utilities
     - resource: Microsoft.WinGet.DSC/WinGetPackage
-      id: obsStudio
-      directives:
-        description: Install OBS Studio
-        allowPrerelease: true
-      settings:
-        id: OBSProject.OBSStudio
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: screenToGif
       directives:
         description: Install ScreenToGif
@@ -217,4 +209,29 @@ properties:
       settings:
         id: Brave.Brave
         source: msstore
+# Stream/Presentation
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: obsStudio
+      directives:
+        description: Install OBS Studio
+        allowPrerelease: true
+      settings:
+        id: OBSProject.OBSStudio
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: zoomit
+      directives:
+        description: Install Zoomit
+        allowPrerelease: true
+      settings:
+        id: Microsoft.Sysinternals.ZoomIt
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: carnac
+      directives:
+        description: Install Carnac
+        allowPrerelease: true
+      settings:
+        id: code52.Carnac
+        source: winget
   configurationVersion: 0.2.0
