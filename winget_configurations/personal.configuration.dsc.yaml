@@ -114,4 +114,11 @@ properties:
       settings:
         id: Nvidia.Broadcast
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      directives:
+        description: Install Fan Control
+        allowPrerelease: true
+      settings:
+        id: Rem0o.FanControl
+        source: winget
   configurationVersion: 0.2.0
