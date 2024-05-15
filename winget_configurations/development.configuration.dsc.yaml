@@ -234,4 +234,12 @@ properties:
       settings:
         id: code52.Carnac
         source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: sharex
+      directives:
+        description: Install ShareX
+        allowPrerelease: true
+      settings:
+        id: ShareX.ShareX
+        source: winget  
   configurationVersion: 0.2.0
