@@ -241,5 +241,13 @@ properties:
         allowPrerelease: true
       settings:
         id: ShareX.ShareX
-        source: winget  
+        source: winget
+    - resource: Microsoft.WinGet.DSC/WinGetPackage
+      id: powertoys
+      directives:
+        description: Install PowerToys
+        allowPrerelease: true
+      settings:
+        id: Microsoft.PowerToys
+        source: winget    
   configurationVersion: 0.2.0
