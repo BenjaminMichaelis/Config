@@ -15,7 +15,40 @@ properties:
         allowPrerelease: true
       settings:
         Ensure: Present
-# Install Resources
+    - resource: Microsoft.Windows.Developer/Taskbar
+      directives:
+        description: Revert taskbar settings
+        allowPrerelease: true
+      settings:
+        Alignment: Middle # [KeepCurrentValue, Left]
+        HideLabelsMode: Always # [KeepCurrentValue, WhenFull, Never]
+        SearchBoxMode: Hide # [KeepCurrentValue, ShowIconOnly, SearchBox, ShowIconAndLabel]
+        TaskViewButton: Hide # [KeepCurrentValue, Show]
+        WidgetsButton: Hide # [KeepCurrentValue, Show]
+        RestartExplorer: True # Use caution when setting `RestartExplorer: true` as this will force explorer to close. Required for `HideLabelsMode`.
+    - resource: Microsoft.Windows.Developer/WindowsExplorer
+      directives:
+        description: Revert Windows Explorer settings
+        allowPrerelease: true
+      settings:
+        FileExtensions: Show # [KeepCurrentValue, Hide]
+        HiddenFiles: Show # [KeepCurrentValue, Hide]
+        ItemCheckBoxes: Show # [KeepCurrentValue, Hide]
+        RestartExplorer: # Use caution when setting `RestartExplorer: true` as this will force explorer to close. Required for all WindowsExplorer settings.
+    - resource: Microsoft.Windows.Developer/ShowSecondsInClock
+      directives:
+        description: Hide seconds in clock
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+    - resource: Microsoft.Windows.Developer/EnableDarkMode
+      directives:
+        description: Enable dark mode
+        allowPrerelease: true
+      settings:
+        Ensure: Present
+        # Use caution when setting `RestartExplorer: true` as this will force explorer to close.
+        RestartExplorer: true # Required to apply changes
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: Git
       directives:
@@ -109,7 +142,7 @@ properties:
         # https://learn.microsoft.com/visualstudio/install/workload-and-component-ids
         productId: Microsoft.VisualStudio.Product.Enterprise
         channelId: VisualStudio.17.Release
-        vsConfigFile: '${WinGetConfigRoot}\.vsconfig'
+        vsConfigFile: '${WinGetConfigRoot}\..\.vsconfig'
 # Install additional Dev/Debug Applications
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: gitkraken
@@ -150,7 +183,7 @@ properties:
         allowPrerelease: true
       settings:
         id: Microsoft.SQLServerManagementStudio
-        source: winget   
+        source: winget
 # Utilities
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: screenToGif
@@ -194,21 +227,21 @@ properties:
         allowPrerelease: true
       settings:
         id: Google.Chrome
-        source: msstore
+        source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
         description: Install Firefox
         allowPrerelease: true
       settings:
         id: Mozilla.Firefox
-        source: msstore
+        source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
         description: Install Brave
         allowPrerelease: true
       settings:
         id: Brave.Brave
-        source: msstore
+        source: winget
 # Stream/Presentation
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: obsStudio
@@ -249,5 +282,5 @@ properties:
         allowPrerelease: true
       settings:
         id: Microsoft.PowerToys
-        source: winget    
+        source: winget
   configurationVersion: 0.2.0
