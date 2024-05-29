@@ -1,12 +1,76 @@
 {
-    "json.schemas": [{
-        "fileMatch": [
-            "/.json"
+    "files.associations": {
+        "*.c": "c",
+        "*.md": "markdown",
+        "*.py": "python"
+    },
+    "editor.renderWhitespace": "all",
+    "markdown.extension.toc.updateOnSave": false,
+    "cSpell.userWords": [
+        "michaelis",
+        "Michaelis",
+        "Vite",
+        "viewmodels",
+        "composables"
+    ],
+    "files.autoSave": "afterDelay",
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#70500c",
+        "titleBar.inactiveBackground": "#3f3a36",
+        "titleBar.activeForeground": "#000",
+    },
+    "files.eol": "\n",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb",
+        "*.html": "default"
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "[python]": {
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
         ],
-        "url": "https://raw.githubusercontent.com/lukesampson/scoop/master/schema.json"
-    }],
-    "cSpell.words": [
-        "choco",
-        "powercfg"
-    ]
+        "editor.formatOnType": true
+    },
+    "redhat.telemetry.enabled": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "latex-workshop.view.pdf.viewer": "tab",
+    "git.autofetch": true,
+    "git.confirmSync": true,
+    "git.enableCommitSigning": true,
+    "git.mergeEditor": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "liveshare.allowGuestTaskControl": true,
+    "liveshare.allowGuestDebugControl": true,
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": true,
+        "markdown": true,
+        "vue": true
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Windows PowerShell": {
+            "path": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+        }
+    },
+    "terminal.integrated.fontFamily": "MesloLGM Nerd Font",
+    "vue.blocks": {},
+    "xml.extension.jars": []
 }
