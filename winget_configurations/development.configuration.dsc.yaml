@@ -21,6 +21,10 @@ properties:
     ########################################
     ### Format a new Dev Drive
     ### -------------------------------------
+    # See https://github.com/dsccommunity/StorageDsc/wiki/Disk for details about the parameters for the Disk resource.
+    # Note: the AllowDestructive flag is used to signal to the disk dsc resource that if 
+    # it needs to resize an existing partition, it can do so. The disk resource also takes a flag called 'ClearDisk', Its important that
+    # you do not combine the usage of 'AllowDestructive' and 'ClearDisk' as this will clear the entire disk including pre-existing volumes.
     - resource: Disk
       id: devdrive
       directives:
@@ -31,7 +35,7 @@ properties:
         DiskId: "0"
         DiskIdType: "Number"
         DriveLetter: "D"
-        FSLabel: "Dev Drive 1"
+        FSLabel: "Dev"
         DevDrive: true
         AllowDestructive: true
         FSFormat: "ReFS"
@@ -44,7 +48,20 @@ properties:
       settings:
         name: Microsoft-Windows-Subsystem-Linux
         ensure: Present
-    # Set Windows Settings
+    ### Configure Install Ubuntu
+    ### -------------------------------------
+    - resource: PSDscResources/Script
+      id: ubuntuwsl
+      directives:
+        description: Install Ubuntu for WSL
+      settings:
+        SetScript: |
+          $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+          wsl --install -d Ubuntu
+        GetScript: return $false
+        TestScript: return $false
+    ### Set Windows Configuration
+    ### -------------------------------------
     - resource: Microsoft.Windows.Developer/DeveloperMode
       directives:
         description: Enable Developer Mode
@@ -85,7 +102,11 @@ properties:
         Ensure: Present
         # Use caution when setting `RestartExplorer: true` as this will force explorer to close.
         RestartExplorer: true # Required to apply changes
-    # Terminal Settings
+    ########################################
+    ### Install CLIs, SDKs & Tools
+    ########################################
+    ### Terminal Settings
+    ### -------------------------------------
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       id: OMP
       directives:
