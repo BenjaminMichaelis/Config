@@ -413,5 +413,8 @@ function Show-MyHelp {
 }
 Set-Alias MyHelp Show-MyHelp
 
+# https://code.visualstudio.com/docs/terminal/shell-integration
+if ($env:TERM_PROGRAM -eq "vscode") { . "$(code --locate-shell-integration-path pwsh)" }
+
 # Show welcome message
 Write-Host "`nPowerShell profile loaded. Type 'MyHelp' for available custom commands.`n" -ForegroundColor Green
