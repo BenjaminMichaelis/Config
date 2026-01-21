@@ -1,0 +1,17 @@
+# PowerShell temporary files
+*.psprofile
+
+# Editor files
+.vscode/*.log
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing files
+/tmp/
+*.test.ps1
+test_*.ps1
+
+# Logs
+*.log
