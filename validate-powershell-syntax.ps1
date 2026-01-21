@@ -34,7 +34,6 @@ if ($errors) {
 
 # Check for potential variable reference issues
 # Pattern: $variable: in double-quoted strings (not including valid scope modifiers)
-$content = Get-Content $profilePath -Raw
 $lines = Get-Content $profilePath
 
 $issuesFound = $false
@@ -49,10 +48,13 @@ for ($i = 0; $i -lt $lines.Count; $i++) {
         $varName = $matches[1]
         # Additional check: this pattern is only an issue if it's a direct variable reference
         # $(...): is fine, ${...}: needs checking
-        if ($line -match "\`$${varName}:[^:]") {
+        $pattern = '$' + $varName + ':[^:]'
+        if ($line -match $pattern) {
             Write-Host "Warning: Potential variable reference issue at line $($i + 1):" -ForegroundColor Yellow
             Write-Host "  $line" -ForegroundColor Yellow
-            Write-Host "  Consider using `${$varName} or string formatting instead of `$${varName}:" -ForegroundColor Yellow
+            $suggestion = '${' + $varName + '}'
+            $original = '$' + $varName
+            Write-Host "  Consider using $suggestion or string formatting instead of ${original}:" -ForegroundColor Yellow
             $issuesFound = $true
         }
     }
