@@ -1,4 +1,12 @@
 # --- Configuration ------------------------------------------------------------
+# IMPORTANT: PowerShell Syntax Note
+# When using variables in double-quoted strings followed by a colon, use ${var} instead of $var
+# to avoid parser errors. For example:
+#   ❌ "Message: $filePath: error"  - This causes a parser error
+#   ✅ "Message: ${filePath}: error" - This works correctly
+#   ✅ ("Message: {0}: error" -f $filePath) - Format operator also works
+# See validate-powershell-syntax.ps1 for automated checking.
+
 # Ensure TLS 1.2+ for GitHub APIs on older PowerShell
 try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
