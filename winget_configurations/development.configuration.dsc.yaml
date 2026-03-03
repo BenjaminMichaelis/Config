@@ -103,6 +103,19 @@ properties:
         # Use caution when setting `RestartExplorer: true` as this will force explorer to close.
         RestartExplorer: true # Required to apply changes
     ########################################
+    ### WinGet Settings
+    ########################################
+    - resource: Microsoft.WinGet.DSC/WinGetUserSettings
+      directives:
+        description: Configure WinGet settings
+        allowPrerelease: true
+      settings:
+        Settings:
+          visual:
+            enableSixels: true
+            progressBar: sixel
+            showProgress: true
+    ########################################
     ### Install CLIs, SDKs & Tools
     ########################################
     ### Terminal Settings

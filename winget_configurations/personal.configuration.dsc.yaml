@@ -15,6 +15,17 @@ properties:
         allowPrerelease: true
       settings:
         Ensure: Present
+# WinGet Settings
+    - resource: Microsoft.WinGet.DSC/WinGetUserSettings
+      directives:
+        description: Configure WinGet settings
+        allowPrerelease: true
+      settings:
+        Settings:
+          visual:
+            enableSixels: true
+            progressBar: sixel
+            showProgress: true
 # Install Apps
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
