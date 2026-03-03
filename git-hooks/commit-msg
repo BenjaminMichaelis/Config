@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# commit-msg git hook
+# Strips AI-generated trailer lines from commit messages while preserving
+# human Co-authored-by, Signed-off-by, and all other content.
+#
+# Handles (case-insensitive) lines such as:
+#   Made-with: Cursor
+#   Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+#   Co-authored-by: GitHub Copilot <noreply@github.com>
+#   Co-authored-by: Amazon Q <q@amazon.com>
+#   Generated-by: GitHub Copilot
+
+COMMIT_MSG_FILE="$1"
+[ -f "$COMMIT_MSG_FILE" ] || exit 0
+
+# 1. Trailer keys that always indicate AI-generated content
+MARKER_PATTERN='^[[:space:]]*(made-with|generated-by|suggested-by)[[:space:]]*:'
+
+# 2. Co-authored-by lines where the author name starts with a known AI tool
+#    The trailing ([[:space:]]|<|$) ensures we match whole words (e.g. "Claude"
+#    but also "Claude Opus 4.6" while not matching a hypothetical "Claudette").
+AI_NAMES_PATTERN='^[[:space:]]*co-authored?-by[[:space:]]*:[[:space:]]*(github[[:space:]]+copilot|copilot|claude|amazon[[:space:]]+q|amazon[[:space:]]+codewhisperer|codewhisperer|gemini|chatgpt|gpt-?[[:digit:]]|codeium|tabnine|windsurf|opencode)([[:space:]]|<|$)'
+
+# 3. Co-authored-by lines whose email domain belongs to a known AI provider
+AI_EMAIL_PATTERN='^[[:space:]]*co-authored?-by[[:space:]]*:.*<[^>]*@(anthropic\.com|cursor\.sh|codeium\.com|cognition\.ai)[^>]*>'
+
+tmp=$(mktemp) || exit 1
+trap 'rm -f "$tmp"' EXIT
+
+while IFS= read -r line || [ -n "$line" ]; do
+    # Strip trailing carriage return to handle CRLF input safely
+    line="${line%$'\r'}"
+
+    if printf '%s\n' "$line" | grep -qiE "$MARKER_PATTERN"; then
+        continue
+    fi
+    if printf '%s\n' "$line" | grep -qiE "$AI_NAMES_PATTERN"; then
+        continue
+    fi
+    if printf '%s\n' "$line" | grep -qiE "$AI_EMAIL_PATTERN"; then
+        continue
+    fi
+    printf '%s\n' "$line"
+done < "$COMMIT_MSG_FILE" > "$tmp"
+
+# Remove trailing blank lines to avoid leaving a dangling blank when all
+# trailers were stripped, then overwrite the original commit-msg file.
+awk '/[^[:space:]]/{last=NR} {lines[NR]=$0} END{for(i=1;i<=last;i++) print lines[i]}' \
+    "$tmp" > "$COMMIT_MSG_FILE"
