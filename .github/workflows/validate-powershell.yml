@@ -1,0 +1,42 @@
+name: Validate PowerShell
+
+on:
+  push:
+    paths:
+      - '**/*.ps1'
+      - 'PSScriptAnalyzerSettings.psd1'
+      - '.github/workflows/validate-powershell.yml'
+  pull_request:
+    paths:
+      - '**/*.ps1'
+      - 'PSScriptAnalyzerSettings.psd1'
+      - '.github/workflows/validate-powershell.yml'
+
+jobs:
+  lint:
+    name: PSScriptAnalyzer
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer)) {
+            Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck -Scope CurrentUser
+          }
+          Import-Module PSScriptAnalyzer
+
+      - name: Run PSScriptAnalyzer on all PowerShell scripts
+        shell: pwsh
+        run: |
+          $results = Invoke-ScriptAnalyzer -Path . -Recurse -Settings PSScriptAnalyzerSettings.psd1
+          if ($results) {
+            $results | Format-Table -AutoSize
+            Write-Error "PSScriptAnalyzer found $($results.Count) issue(s). Please fix them before merging."
+            exit 1
+          }
+          Write-Host "PSScriptAnalyzer: No issues found." -ForegroundColor Green
