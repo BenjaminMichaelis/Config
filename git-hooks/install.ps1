@@ -22,7 +22,7 @@ if (-not (Test-Path $HooksDir)) {
 
 if ($UsePowerShell) {
     # Copy the PowerShell hook script
-    Copy-Item "$ScriptDir\commit-msg.ps1" "$HooksDir\commit-msg.ps1" -Force
+    Copy-Item (Join-Path $ScriptDir 'commit-msg.ps1') (Join-Path $HooksDir 'commit-msg.ps1') -Force
 
     # Write a minimal bash shim that delegates to pwsh
     $shim = @'
@@ -30,7 +30,7 @@ if ($UsePowerShell) {
 pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass \
      -File "$(dirname "$0")/commit-msg.ps1" "$1"
 '@
-    [System.IO.File]::WriteAllText("$HooksDir\commit-msg", $shim, (New-Object System.Text.UTF8Encoding $false))
+    [System.IO.File]::WriteAllText(([System.IO.Path]::Combine($HooksDir, 'commit-msg')), $shim, (New-Object System.Text.UTF8Encoding $false))
     Write-Host "Installed PowerShell commit-msg hook → $HooksDir"
 } else {
     Copy-Item "$ScriptDir\commit-msg" "$HooksDir\commit-msg" -Force

@@ -10,10 +10,10 @@ Describe 'install.ps1 -UsePowerShell shim' {
         New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
 
         # Copy commit-msg.ps1 so install.ps1 can find it
-        Copy-Item "$PSScriptRoot\..\commit-msg.ps1" $tempDir -Force
+        Copy-Item ([System.IO.Path]::Combine($PSScriptRoot, '..', 'commit-msg.ps1')) $tempDir -Force
 
         # Run install.ps1 with the temp hooks dir
-        & "$PSScriptRoot\..\install.ps1" -UsePowerShell -HooksDir $tempDir
+        & ([System.IO.Path]::Combine($PSScriptRoot, '..', 'install.ps1')) -UsePowerShell -HooksDir $tempDir
     }
 
     AfterAll {

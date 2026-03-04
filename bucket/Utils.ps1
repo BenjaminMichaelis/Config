@@ -7,7 +7,11 @@ if(!$env:SCOOP -and (test-path "$env:ProgramData\scoop\apps\scoop\current")) {
 
 if($env:SCOOP) {
     $currentScoopDirectory = "$env:SCOOP\apps\scoop\current"
-    . (Join-Path $currentScoopDirectory 'libexec\scoop-search.ps1') > $null
+    try {
+        . (Join-Path $currentScoopDirectory 'libexec\scoop-search.ps1') > $null
+    } catch {
+        Write-Warning "Could not load Scoop internals: $_"
+    }
 }
 else {
     Write-Warning '$env:SCOOP not found.'
@@ -139,16 +143,18 @@ function scoop {
     switch ($cmd) {
         'install' {  
             #Make the $UserBucket the priority.
-            $null, $bucket, $null = parse_app $arg1
-            if(-not $bucket) {
-                scoop search $arg1 -PSCustomObject | Where-Object {
-                    $_.name -match "^$arg1$" 
-                } | Where-Object { 
-                        $_.Bucket -eq $UserBucket 
-                } | ForEach-Object {
-                    $index = [array]::indexof($localArgs,$_.name)
-                    $localArgs[$index] = "$UserBucket/$arg1"
-                } 
+            if (Get-Command parse_app -ErrorAction SilentlyContinue) {
+                $null, $bucket, $null = parse_app $arg1
+                if(-not $bucket) {
+                    scoop search $arg1 -PSCustomObject | Where-Object {
+                        $_.name -match "^$arg1$" 
+                    } | Where-Object { 
+                            $_.Bucket -eq $UserBucket 
+                    } | ForEach-Object {
+                        $index = [array]::indexof($localArgs,$_.name)
+                        $localArgs[$index] = "$UserBucket/$arg1"
+                    } 
+                }
             }
             scoop.ps1 @localArgs
         }
