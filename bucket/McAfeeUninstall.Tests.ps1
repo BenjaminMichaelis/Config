@@ -7,7 +7,7 @@ Describe Install-McAfeeUninstall {
     it "scoop install McAfeeUninstall" {
         $meScript = $PSCommandPath
         $InstallName = ((Split-Path $meScript -Leaf) -replace '.Tests.ps1', '')
-        if(Test-ScoopPackageInstalled $InstallName) { scoop uninstall $installName }
+        scoop uninstall $InstallName 2>$null  # no-op if not already installed
         $manifestPath = "$PSScriptRoot\McAfeeUninstall.json"
         $manifestJson = Get-Content $manifestPath
         $manifest = $manifestJson | ConvertFrom-Json

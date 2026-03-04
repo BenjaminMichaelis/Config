@@ -1,6 +1,6 @@
 Describe 'McAfeeUninstall.json - BOM and URL validation' {
     BeforeAll {
-        $script:jsonPath = "$PSScriptRoot\..\McAfeeUninstall.json"
+        $script:jsonPath = [System.IO.Path]::Combine($PSScriptRoot, '..', 'McAfeeUninstall.json')
     }
 
     It 'should not start with a UTF-8 BOM' {
@@ -21,7 +21,7 @@ Describe 'McAfeeUninstall.json - BOM and URL validation' {
 
 Describe 'McAfeeUninstall.ps1 - Case-sensitive IndexOf fix' {
     BeforeAll {
-        $script:scriptContent = Get-Content "$PSScriptRoot\..\McAfeeUninstall.ps1" -Raw
+        $script:scriptContent = Get-Content ([System.IO.Path]::Combine($PSScriptRoot, '..', 'McAfeeUninstall.ps1')) -Raw
     }
 
     It 'should use OrdinalIgnoreCase with all IndexOf calls' {
@@ -36,7 +36,7 @@ Describe 'McAfeeUninstall.ps1 - Case-sensitive IndexOf fix' {
 
 Describe 'McAfeeUninstall.ps1 - No auto-execution on dot-source' {
     BeforeAll {
-        $script:scriptContent = Get-Content "$PSScriptRoot\..\McAfeeUninstall.ps1" -Raw
+        $script:scriptContent = Get-Content ([System.IO.Path]::Combine($PSScriptRoot, '..', 'McAfeeUninstall.ps1')) -Raw
     }
 
     It 'should guard the top-level function call with invocation check' {
