@@ -30,7 +30,7 @@ function Add-ScoopBucket {
     $env:Path = "$env:Path;$env:ProgramFiles\Git\cmd\"
   } 
 
-  if ((scoop bucket list) -notcontains $name) {
+  if ((scoop bucket list).Name -notcontains $name) {
     Write-Host "scoop bucket add $name $url"
     # Run in new PowerShell process to ensure git path is enabled.
     # powershell -ExecutionPolicy unrestricted -Command scoop bucket add $name $url

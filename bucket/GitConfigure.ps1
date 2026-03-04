@@ -9,7 +9,7 @@ Function GitConfigure {
     # See https://msdn.microsoft.com/en-us/powershell/wmf/5.0/feedback_symbolic?f=255&MSPPError=-2147217396
     if ($env:Data -and (Test-Path "$env:Data")) {
         New-Item -ItemType Junction -Path "$env:USERPROFILE\.ssh" -Target "$env:Data\Profile\.ssh"
-        New-Item -ItemType HardLink -Target "$env:USERPROFILE\.gitconfig" -Path "$env:Data\Profile\.gitconfig"
+        New-Item -ItemType HardLink -Path "$env:USERPROFILE\.gitconfig" -Target "$env:Data\Profile\.gitconfig"
     }
 
     Import-ChocolateyModule
@@ -21,7 +21,7 @@ Function GitConfigure {
         #/NoAutoCrlf"    <# This setting only affects new installs, it will not override an existing .gitconfig. This will ensure 'Checkout as is, commit as is' #>
     }
 
-    Install-Module posh-git -y -Scope -AllUsers -force -allowclobber  # Both Posh-Git and IntelliTect.Git support Get-GitBranch. 
+    Install-Module posh-git -Scope AllUsers -Force -AllowClobber  # Both Posh-Git and IntelliTect.Git support Get-GitBranch. 
                                                                       # IntelliTect.Git will get priority if it appears first in the PSModulePath
                                                                       # or it is installed after Pscx (if not using source code)
     #Import-Module (Get-Childitem $env:PSModulePath.Split(';') posh-git.psm1 -Recurse -ErrorAction Ignore).FullName

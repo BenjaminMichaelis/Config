@@ -142,7 +142,7 @@ function scoop {
             $null, $bucket, $null = parse_app $arg1
             if(-not $bucket) {
                 scoop search $arg1 -PSCustomObject | Where-Object {
-                    $_.name -match "^$args$" 
+                    $_.name -match "^$arg1$" 
                 } | Where-Object { 
                         $_.Bucket -eq $UserBucket 
                 } | ForEach-Object {
@@ -239,7 +239,7 @@ if (!(Test-Path function:Install-WebDownload)) {
             $env:ChocolateyAllowEmptyChecksums = 'true'
             $env:ChocolateyAllowEmptyChecksumsSecure = 'true'
             Install-ChocolateyZipPackage -packageName $PackageName -url $url -unzipLocation $UnzipLocation -specificFolder ''
-            Get-ChildItem $UnzipLocation *.exe | ForEach-Object { Install-BinFile -name TrayIt -path $_.FullName }
+            Get-ChildItem $UnzipLocation *.exe | ForEach-Object { Install-BinFile -name $PackageName -path $_.FullName }
         }
         finally {
             if ($setHelpersPath) {

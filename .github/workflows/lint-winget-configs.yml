@@ -1,0 +1,40 @@
+name: Lint winget configurations
+
+on:
+  push:
+    paths:
+      - 'winget_configurations/**'
+      - '.github/workflows/lint-winget-configs.yml'
+  pull_request:
+    paths:
+      - 'winget_configurations/**'
+      - '.github/workflows/lint-winget-configs.yml'
+
+jobs:
+  lint:
+    name: Lint winget configurations
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate winget configuration files
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem winget_configurations -Filter "*.yaml"
+          foreach ($f in $files) {
+            $content = Get-Content $f.FullName -Raw
+            # Check for null RestartExplorer (bare colon with only optional comment after)
+            if ($content -match 'RestartExplorer\s*:\s*(#.*)?[\r\n]') {
+              Write-Error "Null RestartExplorer found in $($f.Name)"
+              exit 1
+            }
+            # Check for AllowDestructive: true
+            if ($content -match 'AllowDestructive\s*:\s*true') {
+              Write-Error "AllowDestructive: true found in $($f.Name)"
+              exit 1
+            }
+          }
+          Write-Host "All YAML checks passed"

@@ -8,13 +8,6 @@ properties:
       settings:
         MinVersion: '10.0.22000'
   resources:
-# Set Windows Settings
-    - resource: Microsoft.Windows.Developer/DeveloperMode
-      directives:
-        description: Enable Developer Mode
-        allowPrerelease: true
-      settings:
-        Ensure: Present
 # Install GPU Applications
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:

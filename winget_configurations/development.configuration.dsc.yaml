@@ -37,7 +37,7 @@ properties:
         DriveLetter: "D"
         FSLabel: "Dev"
         DevDrive: true
-        AllowDestructive: true
+        AllowDestructive: false
         FSFormat: "ReFS"
         Size: "50Gb"
     ### Install WSL
@@ -58,8 +58,8 @@ properties:
         SetScript: |
           $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
           wsl --install -d Ubuntu
-        GetScript: return $false
-        TestScript: return $false
+        GetScript: return @{ Result = (((wsl -l -q) -replace [char]0,'') | Out-String) }
+        TestScript: return (((wsl -l -q) -replace [char]0,'') -contains 'Ubuntu')
     ### Set Windows Configuration
     ### -------------------------------------
     - resource: Microsoft.Windows.Developer/DeveloperMode
@@ -87,10 +87,11 @@ properties:
         FileExtensions: Show # [KeepCurrentValue, Hide]
         HiddenFiles: Show # [KeepCurrentValue, Hide]
         ItemCheckBoxes: Show # [KeepCurrentValue, Hide]
-        RestartExplorer: # Use caution when setting `RestartExplorer: true` as this will force explorer to close. Required for all WindowsExplorer settings.
+        # Use caution when setting `RestartExplorer: true` as this will force explorer to close. Required for all WindowsExplorer settings.
+        RestartExplorer: true
     - resource: Microsoft.Windows.Developer/ShowSecondsInClock
       directives:
-        description: Hide seconds in clock
+        description: Show seconds in clock
         allowPrerelease: true
       settings:
         Ensure: Present
@@ -105,6 +106,7 @@ properties:
     ########################################
     ### WinGet Settings
     ########################################
+    ### Single source of truth for WinGet user settings across all configurations
     - resource: Microsoft.WinGet.DSC/WinGetUserSettings
       directives:
         description: Configure WinGet settings

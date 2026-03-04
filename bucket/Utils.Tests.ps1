@@ -1,6 +1,7 @@
 
-$sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace('.Tests', '')
-. "$PSScriptRoot\$sut"
+BeforeAll {
+    . $PSCommandPath.Replace('.Tests.ps1', '.ps1')
+}
 
 Describe 'Test-ChocolateyPackageInstalled' {
     $mockInstalledPackageName = 'MyMockPackage'
@@ -20,10 +21,10 @@ $mockInstalledPackageName 1.1.2.20161210
     }
     
     It "$mockInstalledPackageName IS installedd" {
-        Test-ChocolateyPackageInstalled $mockInstalledPackageName | Should Be $true
+        Test-ChocolateyPackageInstalled $mockInstalledPackageName | Should -Be $true
     }
     It "$mockInstalledPackageName is NOT installedd" {
-        Test-ChocolateyPackageInstalled 'NotInstalledMockPackageNAme' | Should Be $false
+        Test-ChocolateyPackageInstalled 'NotInstalledMockPackageNAme' | Should -Be $false
     }
 }
 
@@ -56,10 +57,10 @@ $previouslyInstalledPackage 1.1.2.20161210
     }
     
     It "choco install $previouslyInstalledPackage" {
-        choco install  $previouslyInstalledPackage 3>&1 | Should Be "$previouslyInstalledPackage is already installed."
+        choco install  $previouslyInstalledPackage 3>&1 | Should -Be "$previouslyInstalledPackage is already installed."
     }
     It "choco install NewSamplePackage" {
-        choco install NewSamplePackage | Should Be 'Installing NewSamplePackage'
+        choco install NewSamplePackage | Should -Be 'Installing NewSamplePackage'
     }
 }
 
@@ -79,18 +80,18 @@ Installed apps matching '$mockExistingAppName':
     }
 
     it "$mockExistingAppName is installed " {
-        Test-ScoopPackageInstalled $mockExistingAppName | Should Be $true
+        Test-ScoopPackageInstalled $mockExistingAppName | Should -Be $true
     }
     it "$mockMissingAppName is NOT installed " {
-        Test-ScoopPackageInstalled $mockMissingAppName | Should Be $false
+        Test-ScoopPackageInstalled $mockMissingAppName | Should -Be $false
     }
 }
 
 Describe 'Get-InstallArgs' {
     It 'install stuff' {
         $scoopArgs = Get-InstallArgs install stuff
-        $scoopArgs.Action | Should Be 'install'
-        $scoopArgs.Arg1 | Should Be 'stuff'
+        $scoopArgs.Action | Should -Be 'install'
+        $scoopArgs.Arg1 | Should -Be 'stuff'
     }
 }
 
@@ -109,11 +110,11 @@ Describe 'scoop search wrapper' {
     
     It 'scoop search has -PSCustomObject option' {
         $results = scoop search $mockAppName -PSCustomObject 
-        $results | Should Not Be $null
-        $results.count | Should Not Be 1
-        $results.GetType() | Should Be 'System.Management.Automation.PSCustomObject'
-        $results.Name | Should Be $mockAppName
-        $results.Bucket | Should Be (Get-LocalBucket | Select-Object -First 1)
+        $results | Should -Not -Be $null
+        $results.count | Should -Not -Be 1
+        $results.GetType() | Should -Be 'System.Management.Automation.PSCustomObject'
+        $results.Name | Should -Be $mockAppName
+        $results.Bucket | Should -Be (Get-LocalBucket | Select-Object -First 1)
     }
 }
 
@@ -121,14 +122,14 @@ Describe 'scoop search wrapper' {
 Describe 'Get-LocalBucket' {
     It 'Get-LocalBucket' {
         $localBuckets = Get-LocalBucket
-        $localBuckets -contains 'main' | Should Be $true
+        $localBuckets -contains 'main' | Should -Be $true
         if($UserBucket) {
-            $localBuckets[0] | Should Be 'BenjaminMichaelis'
+            $localBuckets[0] | Should -Be 'BenjaminMichaelis'
         }
     }
 }
 
-
+# Static text checks for Utils.ps1 live in bucket/tests/Utils.Tests.ps1 (run in CI).
 Describe 'scoop install wrapper' {
     # [bool]$script:firstBucket=$true
     $mockAppName = 'dotnet'
@@ -146,6 +147,6 @@ Describe 'scoop install wrapper' {
         # } | ForEach-Object { 
         #     "$($_.Bucket)/$($_.name)"
         # }
-        $results | Should Be "install $mockAppName"
+        $results | Should -Be "install $mockAppName"
     }
 }

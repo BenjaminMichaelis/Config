@@ -63,7 +63,7 @@ if ($MyInvocation.InvocationName -ne '.') {
         [System.IO.File]::WriteAllText(
             $commitMsgFile,
             $content,
-            [System.Text.Encoding]::UTF8
+            (New-Object System.Text.UTF8Encoding $false)
         )
     }
 }

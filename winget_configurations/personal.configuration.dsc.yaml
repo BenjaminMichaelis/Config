@@ -8,32 +8,7 @@ properties:
       settings:
         MinVersion: '10.0.22000'
   resources:
-# Set Windows Settings
-    - resource: Microsoft.Windows.Developer/DeveloperMode
-      directives:
-        description: Enable Developer Mode
-        allowPrerelease: true
-      settings:
-        Ensure: Present
-# WinGet Settings
-    - resource: Microsoft.WinGet.DSC/WinGetUserSettings
-      directives:
-        description: Configure WinGet settings
-        allowPrerelease: true
-      settings:
-        Settings:
-          visual:
-            enableSixels: true
-            progressBar: sixel
-            showProgress: true
 # Install Apps
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
-        description: Install Brave
-        allowPrerelease: true
-      settings:
-        id: Brave.Brave
-        source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:
         description: Install Joplin
@@ -54,27 +29,6 @@ properties:
         allowPrerelease: true
       settings:
         id: ProtonTechnologies.ProtonMailBridge
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
-        description: Install Proton VPN
-        allowPrerelease: true
-      settings:
-        id: ProtonTechnologies.ProtonVPN
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
-        description: Install Cryptomator
-        allowPrerelease: true
-      settings:
-        id: Cryptomator.Cryptomator
-        source: winget
-    - resource: Microsoft.WinGet.DSC/WinGetPackage
-      directives:
-        description: Install Powertoys
-        allowPrerelease: true
-      settings:
-        id: Microsoft.PowerToys
         source: winget
     - resource: Microsoft.WinGet.DSC/WinGetPackage
       directives:

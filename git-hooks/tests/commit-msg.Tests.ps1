@@ -298,6 +298,16 @@ Describe 'Remove-AITrailers' {
         }
     }
 
+    Context 'cognition.ai email domain is removed' {
+        It 'removes Co-authored-by with cognition.ai email domain' {
+            $email = 'bot@cognition.ai'
+            $lines = @('Fix bug', '', "Co-authored-by: Devin <$email>")
+            $result = @(Remove-AITrailers -Lines $lines)
+            $result | Should -Not -Match 'cognition\.ai'
+            $result[0] | Should -Be 'Fix bug'
+        }
+    }
+
     Context 'Case-insensitive matching' {
         It 'removes CO-AUTHORED-BY: GITHUB COPILOT in uppercase' {
             $lines = @('Fix bug', '', 'CO-AUTHORED-BY: GITHUB COPILOT <COPILOT@GITHUB.COM>')
@@ -310,6 +320,38 @@ Describe 'Remove-AITrailers' {
             $result = Remove-AITrailers -Lines $lines
             $result | Should -Not -Match 'MADE-WITH'
         }
+    }
+}
+
+# ---------------------------------------------------------------------------
+# Output encoding – the PowerShell hook must NOT write a UTF-8 BOM
+# ---------------------------------------------------------------------------
+Describe 'output encoding' {
+    It 'does not write a UTF-8 BOM to the commit message file' {
+        $tmpFile = [System.IO.Path]::GetTempFileName()
+        try {
+            $noBomEncoding = New-Object System.Text.UTF8Encoding $false
+            [System.IO.File]::WriteAllText($tmpFile, "feat: test`nCo-authored-by: Claude <noreply@anthropic.com>`n", $noBomEncoding)
+            & "$PSScriptRoot\..\commit-msg.ps1" $tmpFile
+            $bytes = [System.IO.File]::ReadAllBytes($tmpFile)
+            # The first 3 bytes must NOT be the UTF-8 BOM (0xEF 0xBB 0xBF)
+            $hasBom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
+            $hasBom | Should -BeFalse
+        }
+        finally {
+            Remove-Item $tmpFile -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+# ---------------------------------------------------------------------------
+# Bash hook regex validation
+# ---------------------------------------------------------------------------
+Describe 'bash commit-msg regex patterns' {
+    It 'AI_NAMES_PATTERN uses [[:digit:]]+ (one-or-more) for GPT model numbers' {
+        $hookDir = Split-Path -Parent $PSScriptRoot
+        $bashContent = Get-Content -Raw (Join-Path $hookDir 'commit-msg')
+        $bashContent | Should -Match '\[\[:digit:\]\]\+'
     }
 }
 

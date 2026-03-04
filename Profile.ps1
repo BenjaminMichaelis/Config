@@ -36,44 +36,37 @@ function Log-Message {
         $line = "{0}: {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $Message
 
         $m = [System.Threading.Mutex]::new($false, $script:LogMutexName)
-        if ($m.WaitOne([TimeSpan]::FromSeconds(2))) {
-            try {
-                $attempts = 0
-                while ($attempts -lt 5) {
-                    try {
-                        $fs = [System.IO.File]::Open($logFile, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+        try {
+            if ($m.WaitOne([TimeSpan]::FromSeconds(2))) {
+                try {
+                    $attempts = 0
+                    while ($attempts -lt 5) {
                         try {
-                            $sw = New-Object System.IO.StreamWriter($fs)
-                            $sw.WriteLine($line)
-                            $sw.Flush()
-                            $sw.Dispose()
-                        } finally {
-                            $fs.Dispose()
+                            $fs = [System.IO.File]::Open($logFile, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write, [System.IO.FileShare]::ReadWrite)
+                            try {
+                                $sw = New-Object System.IO.StreamWriter($fs)
+                                $sw.WriteLine($line)
+                                $sw.Flush()
+                                $sw.Dispose()
+                            } finally {
+                                $fs.Dispose()
+                            }
+                            break
+                        } catch {
+                            Start-Sleep -Milliseconds 150
+                            $attempts++
                         }
-                        break
-                    } catch {
-                        Start-Sleep -Milliseconds 150
-                        $attempts++
                     }
+                } finally {
+                    try { $m.ReleaseMutex() | Out-Null } catch { }
                 }
-            } finally {
-                try { $m.ReleaseMutex() | Out-Null } catch { }
-                $m.Dispose()
             }
+        } finally {
+            $m.Dispose()
         }
     } catch {
         # Swallow all logging errors to avoid breaking the session
     }
-}
-
-# Function to calculate SHA256 hash of a string
-function Get-SHA256 {
-    param ([string]$String)
-    [System.BitConverter]::ToString(
-        [System.Security.Cryptography.SHA256]::Create().ComputeHash(
-            [System.Text.Encoding]::UTF8.GetBytes($String)
-        )
-    ).Replace("-", "").ToLower()
 }
 
 # Function to show differences between two strings
@@ -263,9 +256,6 @@ try {
 } catch {
     Log-Message "Failed to initialize oh-my-posh: $($_.Exception.Message)"
 }
-
-# Help Yarn Builds
-$env:PWD = (Get-Location).Path
 
 # --- Custom Aliases -----------------------------------------------------------
 function ConvertTo-Base64 {

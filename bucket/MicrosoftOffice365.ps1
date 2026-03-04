@@ -1,13 +1,10 @@
 
 . "$PSScriptRoot\Utils.ps1"
 
-#if(-not (Test-ChocolateyPackageInstalled 'Office365ProPlus')) {
+if ($MyInvocation.InvocationName -ne '.') {
     choco install Office365ProPlus -y
-#}
-
-#if(-not (Test-ChocolateyPackageInstalled 'Microsoft-Teams')) {
     choco install Microsoft-Teams -y
-#}
+}
 
 Function Get-Office365TenantId {
     [OutputType([string])]
@@ -33,12 +30,6 @@ Function Set-OneDriveConfig {
     Set-ItemProperty -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir' -Name "$(Get-Office365TenantId 'IntelliTectSP')" -Value "C:\OneDrive\IntelliTect"
     Set-ItemProperty -Path 'HKCU:\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir' -Name "$(Get-Office365TenantId 'Michaelises')" -Value "C:\OneDrive\Michaelises"
 
-    <# 
-    Set the default OneDrive location
-    See https://docs.microsoft.com/en-us/onedrive/use-group-policy#set-the-default-location-for-the-onedrive-folder
-    #>
-    Set-ItemProperty -path 'HKLM:\SOFTWARE\Policies\Microsoft\OneDrive' -name 'GPOSetUpdateRing' -value 'dword:00000004'
-
     <#
     We release OneDrive sync app (OneDrive.exe) updates to the public through three rings- first to 
     Insiders, then Production, and finally Enterprise. This setting lets you specify the ring for 
@@ -51,7 +42,9 @@ Function Set-OneDriveConfig {
     deployment (within a 60-day window).
     See https://docs.microsoft.com/en-us/onedrive/sync-client-update-process
     #>
-    Set-ItemProperty -path 'HKLM:\SOFTWARE\Policies\Microsoft\OneDrive' -name 'GPOSetUpdateRing' -value 'dword:00000004'
+    Set-ItemProperty -path 'HKLM:\SOFTWARE\Policies\Microsoft\OneDrive' -name 'GPOSetUpdateRing' -value 4
 }
-Set-OneDriveConfig
+if ($MyInvocation.InvocationName -ne '.') {
+    Set-OneDriveConfig
+}
 

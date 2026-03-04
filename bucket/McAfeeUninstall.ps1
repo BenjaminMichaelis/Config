@@ -1,5 +1,3 @@
-Write-Host "Uninstalling McAfee Applications..."
-
 . "$PSScriptRoot\Utils.ps1"
 
 Function Uninstall-McAfeeApplications {
@@ -8,9 +6,13 @@ Function Uninstall-McAfeeApplications {
             Write-Host "Uninstalling $($_.Name)..."
             $UninstallCmd = $_.UninstallString
             # String up to and including the .exe
-            $UninstallExecutible = $UninstallCmd.substring(0, $UninstallCmd.IndexOf(".exe") + 4 )
-            # Any parts after the .exe		
-            $UninstallArguments = $UninstallCmd.substring($UninstallCmd.IndexOf(".exe") + 4 )
+            $exeIndex = $UninstallCmd.IndexOf(".exe", [StringComparison]::OrdinalIgnoreCase)
+            if ($exeIndex -eq -1) {
+                Write-Error "Cannot find .exe in uninstall string: $UninstallCmd"; return
+            }
+            $UninstallExecutible = $UninstallCmd.substring(0, $exeIndex + 4)
+            # Any parts after the .exe
+            $UninstallArguments = $UninstallCmd.substring($exeIndex + 4)
             $parms = @{
                 "FilePath" = "$UninstallExecutible";
                 "Wait"     = $true;
@@ -26,4 +28,8 @@ Function Uninstall-McAfeeApplications {
         }
     }
 }
-Uninstall-McAfeeApplications
+
+if ($MyInvocation.InvocationName -ne '.') {
+    Write-Host "Uninstalling McAfee Applications..."
+    Uninstall-McAfeeApplications
+}

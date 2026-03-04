@@ -1,5 +1,3 @@
-signal
-
 telegram?
 discord?
 synology drive client?
@@ -8,14 +6,10 @@ bitwarden
 ildasm?
 veracrypt
 whonix?
-carnac?
 epubor ultimate?
-kleopatra
 musicbrainz?
 mysql server?
 teracopy
-wsl
-zerotier
 
 
 TODO:

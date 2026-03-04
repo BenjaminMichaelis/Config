@@ -1,0 +1,41 @@
+name: PSScriptAnalyzer
+
+on:
+  push:
+    paths:
+      - '**.ps1'
+      - 'PSScriptAnalyzerSettings.psd1'
+      - '.github/workflows/psscriptanalyzer.yml'
+  pull_request:
+    paths:
+      - '**.ps1'
+      - 'PSScriptAnalyzerSettings.psd1'
+      - '.github/workflows/psscriptanalyzer.yml'
+
+jobs:
+  lint:
+    name: PSScriptAnalyzer
+    runs-on: windows-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer)) {
+            Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck -Scope CurrentUser
+          }
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $results = Invoke-ScriptAnalyzer -Path . -Recurse -Settings PSScriptAnalyzerSettings.psd1 -Severity Error,Warning
+          if ($results) {
+            $results | Format-Table -AutoSize
+            Write-Error "PSScriptAnalyzer found $($results.Count) issue(s)."
+            exit 1
+          }
+          Write-Host "PSScriptAnalyzer: no issues found."

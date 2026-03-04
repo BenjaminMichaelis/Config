@@ -10,11 +10,11 @@
 # By default, mode 1 (bash) is used.  Pass -UsePowerShell to use mode 2.
 
 param(
-    [switch]$UsePowerShell
+    [switch]$UsePowerShell,
+    [string]$HooksDir = (Join-Path $env:LOCALAPPDATA 'git\hooks')
 )
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$HooksDir  = Join-Path $env:LOCALAPPDATA 'git\hooks'
 
 if (-not (Test-Path $HooksDir)) {
     New-Item -ItemType Directory -Path $HooksDir -Force | Out-Null
@@ -30,7 +30,7 @@ if ($UsePowerShell) {
 pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass \
      -File "$(dirname "$0")/commit-msg.ps1" "$1"
 '@
-    [System.IO.File]::WriteAllText("$HooksDir\commit-msg", $shim, [System.Text.Encoding]::UTF8)
+    [System.IO.File]::WriteAllText("$HooksDir\commit-msg", $shim, (New-Object System.Text.UTF8Encoding $false))
     Write-Host "Installed PowerShell commit-msg hook → $HooksDir"
 } else {
     Copy-Item "$ScriptDir\commit-msg" "$HooksDir\commit-msg" -Force
