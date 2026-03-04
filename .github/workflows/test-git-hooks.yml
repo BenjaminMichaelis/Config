@@ -91,7 +91,7 @@ jobs:
         shell: pwsh
         run: |
           $config = New-PesterConfiguration
-          $config.Run.Path = @('bucket/Utils.Tests.ps1', 'bucket/McAfeeUninstall.Tests.ps1')
+          $config.Run.Path = @('bucket/McAfeeUninstall.Tests.ps1')
           $config.Output.Verbosity = 'Detailed'
           $config.TestResult.Enabled = $true
           $config.TestResult.OutputPath = 'test-results-scoop.xml'

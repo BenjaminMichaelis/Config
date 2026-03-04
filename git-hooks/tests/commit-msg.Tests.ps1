@@ -367,7 +367,7 @@ Describe 'commit-msg bash hook (end-to-end)' -Skip:($IsWindows -or -not (Get-Com
             param([string]$Content)
             $tmp = [System.IO.Path]::GetTempFileName()
             try {
-                [System.IO.File]::WriteAllText($tmp, $Content, [System.Text.Encoding]::UTF8)
+                [System.IO.File]::WriteAllText($tmp, $Content, (New-Object System.Text.UTF8Encoding $false))
                 & bash $bashHook $tmp 2>&1 | Out-Null
                 return [System.IO.File]::ReadAllText($tmp)
             }
