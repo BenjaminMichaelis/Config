@@ -189,7 +189,7 @@ Function Get-Program {
     # REview for 32/64 Bit
     # http://gallery.technet.microsoft.com/scriptcenter/PowerShell-Installed-70d0c0f4
 
-    $ProgramRegistryKeys | Get-ChildItem | Get-ItemProperty | 
+    $ProgramRegistryKeys | Where-Object { Test-Path $_ } | Get-ChildItem | Get-ItemProperty | 
     Select-Object  *, @{Name = "Name"; Expression = { 
             if ( ($_ | Get-Member "DisplayName") -and $_.DisplayName) {
                 #Consider $_.PSObject.Properties.Match("DisplayName") as it may be faster
