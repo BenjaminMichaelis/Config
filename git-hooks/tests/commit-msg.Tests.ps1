@@ -112,6 +112,13 @@ Describe 'Remove-AITrailers' {
             $result = Remove-AITrailers -Lines $lines
             $result | Should -Not -Match 'co-authored-by'
         }
+
+        It 'removes Co-authored-by: Copilot with GitHub noreply bot email' {
+            $lines = @('Fix bug', '', 'Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>')
+            $result = @(Remove-AITrailers -Lines $lines)
+            $result | Should -Not -Match 'Co-authored-by'
+            $result[0] | Should -Be 'Fix bug'
+        }
     }
 
     Context 'Claude / Anthropic Co-authored-by is removed' {
@@ -379,6 +386,13 @@ Describe 'commit-msg bash hook (end-to-end)' -Skip:($IsWindows -or -not (Get-Com
 
     It 'removes GitHub Copilot trailer' {
         $content = "Fix bug`n`nCo-authored-by: GitHub Copilot <noreply@github.com>`n"
+        $result = Invoke-BashHook $content
+        $result | Should -Not -Match 'Co-authored-by'
+        $result.Trim() | Should -Be 'Fix bug'
+    }
+
+    It 'removes Copilot trailer with GitHub noreply bot email' {
+        $content = "Fix bug`n`nCo-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`n"
         $result = Invoke-BashHook $content
         $result | Should -Not -Match 'Co-authored-by'
         $result.Trim() | Should -Be 'Fix bug'

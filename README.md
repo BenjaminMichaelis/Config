@@ -1,5 +1,21 @@
 # Config Files
 
+## Git Hooks
+
+Strips AI-generated trailers (e.g. `Co-authored-by: Copilot`) from commit messages automatically.
+
+**macOS / Linux:**
+
+```bash
+bash git-hooks/install.sh
+```
+
+**Windows (PowerShell):**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File git-hooks/install.ps1
+```
+
 ## Winget Config instructions
 
 1. Take the desired configuration scripts from the [winget_configurations folder](./winget_configurations)
