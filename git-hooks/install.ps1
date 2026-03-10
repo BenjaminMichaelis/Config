@@ -37,5 +37,13 @@ pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass \
     Write-Host "Installed bash commit-msg hook → $HooksDir"
 }
 
-git config --global core.hooksPath $HooksDir
-Write-Host "Global git hooks path set to: $HooksDir"
+# Git for Windows bash requires POSIX drive notation (e.g. /c/Users/..., not C:\Users\...)
+if ($HooksDir -match '^([A-Za-z]):[/\\](.*)$') {
+    $drive = $Matches[1].ToLower()
+    $rest  = $Matches[2] -replace '\\', '/'
+    $posixHooksDir = "/$drive/$rest"
+} else {
+    $posixHooksDir = $HooksDir -replace '\\', '/'
+}
+git config --global core.hooksPath $posixHooksDir
+Write-Host "Global git hooks path set to: $posixHooksDir"
