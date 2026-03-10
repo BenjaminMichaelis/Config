@@ -29,6 +29,14 @@ Describe 'install.ps1 -UsePowerShell shim' {
         }
     }
 
+    It 'should convert Windows path to POSIX drive notation when setting core.hooksPath' {
+        if ($IsWindows) {
+            $configuredPath = git config --global core.hooksPath
+            $configuredPath | Should -Match '^/[a-z]/'
+            $configuredPath | Should -Not -Match '^[A-Za-z]:'
+        }
+    }
+
     It 'should write the commit-msg shim without a UTF-8 BOM' {
         $shimPath = Join-Path $tempDir 'commit-msg'
         $shimPath | Should -Exist
