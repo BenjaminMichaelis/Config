@@ -403,8 +403,10 @@ function Show-MyHelp {
 }
 Set-Alias MyHelp Show-MyHelp
 
-# https://code.visualstudio.com/docs/terminal/shell-integration
-if ($env:TERM_PROGRAM -eq "vscode") { . "$(code --locate-shell-integration-path pwsh)" }
+# VS Code 1.68+ auto-injects shell integration via terminal.integrated.shellIntegration.enabled (default: true).
+# The manual code --locate-shell-integration-path call was removed: it triggers VS Code bug #299703 / #300231
+# (App Paths registry entry causes `code` to resolve to Code.exe GUI binary inside VS Code terminals,
+# opening a new window in a loop and returning empty output which fails dot-sourcing).
 
 # Show welcome message
 Write-Host "`nPowerShell profile loaded. Type 'MyHelp' for available custom commands.`n" -ForegroundColor Green
