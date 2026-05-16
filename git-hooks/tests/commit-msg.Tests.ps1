@@ -183,6 +183,12 @@ Describe 'Remove-AITrailers' {
             $result = Remove-AITrailers -Lines $lines
             $result | Should -Not -Match 'cursor\.sh'
         }
+
+        It 'removes Co-authored-by: Cursor cursoragent@cursor.com' {
+            $lines = @('Fix bug', '', 'Co-authored-by: Cursor cursoragent@cursor.com')
+            $result = Remove-AITrailers -Lines $lines
+            $result | Should -Not -Match 'cursoragent@cursor\.com'
+        }
     }
 
     Context 'Codeium Co-authored-by is removed' {
@@ -416,6 +422,13 @@ Describe 'commit-msg bash hook (end-to-end)' -Skip:($IsWindows -or -not (Get-Com
         $content = "Fix bug`n`nCo-authored-by: Alice Smith <alice@example.com>`n"
         $result = Invoke-BashHook $content
         $result | Should -Match 'Alice Smith'
+    }
+
+    It 'removes Cursor co-author without angle brackets' {
+        $content = "Fix bug`n`nCo-authored-by: Cursor cursoragent@cursor.com`n"
+        $result = Invoke-BashHook $content
+        $result | Should -Not -Match 'cursoragent@cursor\.com'
+        $result.Trim() | Should -Be 'Fix bug'
     }
 
     It 'removes AI and preserves human in mixed message' {

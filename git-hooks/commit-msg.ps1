@@ -30,10 +30,10 @@ function Remove-AITrailers {
     # 2. Co-authored-by where the name starts with a known AI tool
     #    The trailing (\s|<|$) keeps whole-word matching so "Claude" still
     #    matches "Claude Opus 4.6" but won't silently drop "Claudette Smith".
-    $aiNamesPattern = '^\s*co-authored?-by\s*:\s*(github\s+copilot|copilot|claude|amazon\s+q|amazon\s+codewhisperer|codewhisperer|gemini|chatgpt|gpt-?\d+|codeium|tabnine|windsurf|opencode)(\s|<|$)'
+    $aiNamesPattern = '^\s*co-authored?-by\s*:\s*(github\s+copilot|copilot|claude|amazon\s+q|amazon\s+codewhisperer|codewhisperer|gemini|chatgpt|gpt-?\d+|cursor|codeium|tabnine|windsurf|opencode)(\s|<|$)'
 
     # 3. Co-authored-by whose email domain belongs to a known AI provider
-    $aiEmailPattern = '^\s*co-authored?-by\s*:.*<[^>]*@(anthropic\.com|cursor\.sh|codeium\.com|cognition\.ai)[^>]*>'
+    $aiEmailPattern = '^\s*co-authored?-by\s*:.*<?[^>\s]*@(anthropic\.com|cursor\.sh|cursor\.com|codeium\.com|cognition\.ai)[^>\s]*>?'
 
     $filtered = [System.Collections.Generic.List[string]]::new()
     foreach ($line in $Lines) {
