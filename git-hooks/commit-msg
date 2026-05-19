@@ -7,6 +7,7 @@
 #   Made-with: Cursor
 #   Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 #   Co-authored-by: GitHub Copilot <noreply@github.com>
+#   Co-authored-by: Copilot Autofix powered by AI <175728472+Copilot@users.noreply.github.com>
 #   Co-authored-by: Amazon Q <q@amazon.com>
 #   Generated-by: GitHub Copilot
 
@@ -19,7 +20,7 @@ MARKER_PATTERN='^[[:space:]]*(made-with|generated-by|suggested-by)[[:space:]]*:'
 # 2. Co-authored-by lines where the author name starts with a known AI tool
 #    The trailing ([[:space:]]|<|$) ensures we match whole words (e.g. "Claude"
 #    but also "Claude Opus 4.6" while not matching a hypothetical "Claudette").
-AI_NAMES_PATTERN='^[[:space:]]*co-authored?-by[[:space:]]*:[[:space:]]*(github[[:space:]]+copilot|copilot|claude|amazon[[:space:]]+q|amazon[[:space:]]+codewhisperer|codewhisperer|gemini|chatgpt|gpt-?[[:digit:]]+|cursor|codeium|tabnine|windsurf|opencode)([[:space:]]|<|$)'
+AI_NAMES_PATTERN='^[[:space:]]*co-authored?-by[[:space:]]*:[[:space:]]*(github[[:space:]]+copilot|copilot[[:space:]]+autofix|copilot|claude|amazon[[:space:]]+q|amazon[[:space:]]+codewhisperer|codewhisperer|gemini|chatgpt|gpt-?[[:digit:]]+|cursor|codeium|tabnine|windsurf|opencode)([[:space:]]|<|$)'
 
 # 3. Co-authored-by lines whose email domain belongs to a known AI provider
 AI_EMAIL_PATTERN='^[[:space:]]*co-authored?-by[[:space:]]*:.*<?[^>[:space:]]*@(anthropic\.com|cursor\.sh|cursor\.com|codeium\.com|cognition\.ai)[^>[:space:]]*>?'
