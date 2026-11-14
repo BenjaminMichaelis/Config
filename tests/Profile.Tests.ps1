@@ -1,6 +1,6 @@
 BeforeDiscovery {
     $script:Hosts = @()
-    foreach ($exe in 'powershell.exe', 'pwsh.exe') {
+    foreach ($exe in 'powershell', 'pwsh') {
         if (Get-Command $exe -ErrorAction SilentlyContinue) { $script:Hosts += @{ Exe = $exe } }
     }
 }
@@ -73,7 +73,7 @@ Describe 'Test-InteractiveProfileSession' {
             $cmd = ". '$script:ProfilePath' | Out-Null; " +
                 "Test-InteractiveProfileSession -CommandLineArgs @($argList) " +
                 "-InputRedirected `$$InputRedirected -OutputRedirected `$$OutputRedirected"
-            $out = Invoke-ChildShell -Exe 'pwsh.exe' -Arguments @('-NoProfile', '-Command', $cmd)
+            $out = Invoke-ChildShell -Exe 'pwsh' -Arguments @('-NoProfile', '-Command', $cmd)
             ($out | Select-Object -Last 1).ToString().Trim()
         }
     }
