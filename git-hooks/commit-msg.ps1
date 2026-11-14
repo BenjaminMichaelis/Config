@@ -8,6 +8,7 @@
 #   Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 #   Co-authored-by: GitHub Copilot <noreply@github.com>
 #   Co-authored-by: Copilot Autofix powered by AI <175728472+Copilot@users.noreply.github.com>
+#   Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>
 #   Co-authored-by: Amazon Q <q@amazon.com>
 #   Generated-by: GitHub Copilot
 
