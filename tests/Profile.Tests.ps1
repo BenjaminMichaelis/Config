@@ -10,6 +10,14 @@ BeforeAll {
     $script:FakeHome = Join-Path ([IO.Path]::GetTempPath()) "profile-tests-$([guid]::NewGuid().ToString('N'))"
     New-Item -ItemType Directory -Path $script:FakeHome | Out-Null
 
+    # Joins child output and strips terminal control sequences (e.g. pwsh on Linux
+    # emits ESC[?1h / ESC[?1l around piped-stdin sessions) so only real text is compared.
+    function ConvertTo-PlainText {
+        param($Output)
+        $text = ($Output | ForEach-Object { "$_" }) -join "`n"
+        ($text -replace '\x1b\[[0-9;?]*[ -/]*[@-~]', '').Trim()
+    }
+
     # Runs a child shell with an isolated HOME so the profile's update check
     # and log files can't touch the real user profile.
     function Invoke-ChildShell {
@@ -37,20 +45,20 @@ Describe 'Profile.ps1 in non-interactive sessions (<Exe>)' -ForEach $script:Host
     It 'prints nothing extra with -Command' {
         $out = Invoke-ChildShell -Exe $Exe -Arguments @(
             '-NoProfile', '-Command', ". '$script:ProfilePath'; Write-Output PSPresent")
-        ($out -join "`n").Trim() | Should -BeExactly 'PSPresent'
+        ConvertTo-PlainText $out | Should -BeExactly 'PSPresent'
     }
 
     It 'prints nothing extra when run via -File' {
         $wrapper = Join-Path $script:FakeHome 'wrapper.ps1'
         ". '$script:ProfilePath'`nWrite-Output PSPresent" | Set-Content -LiteralPath $wrapper
         $out = Invoke-ChildShell -Exe $Exe -Arguments @('-NoProfile', '-File', $wrapper)
-        ($out -join "`n").Trim() | Should -BeExactly 'PSPresent'
+        ConvertTo-PlainText $out | Should -BeExactly 'PSPresent'
     }
 
     It 'prints nothing extra when commands are piped over stdin' {
         $out = Invoke-ChildShell -Exe $Exe -Arguments @('-NoProfile', '-Command', '-') `
             -StdIn ". '$script:ProfilePath'; Write-Output PSPresent"
-        ($out -join "`n").Trim() | Should -BeExactly 'PSPresent'
+        ConvertTo-PlainText $out | Should -BeExactly 'PSPresent'
     }
 
     It 'skips startup work (update check, prompt customisation) entirely' {
