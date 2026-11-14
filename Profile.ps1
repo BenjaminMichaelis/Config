@@ -1,3 +1,25 @@
+# --- Interactive-session guard -------------------------------------------------
+# Other programs (installers, IDEs, build tools) launch powershell.exe / pwsh.exe and
+# parse its output, e.g. `powershell.exe Write-Output PSPresent` must print exactly
+# "PSPresent". Banners, update prompts and network calls from this profile break that,
+# so only do profile work for a human-driven console session.
+function Test-InteractiveProfileSession {
+    param(
+        [string[]]$CommandLineArgs = [Environment]::GetCommandLineArgs(),
+        [bool]$InputRedirected = [Console]::IsInputRedirected,
+        [bool]$OutputRedirected = [Console]::IsOutputRedirected
+    )
+
+    # Piped stdin or captured stdout means a program is driving this shell.
+    if ($InputRedirected -or $OutputRedirected) { return $false }
+
+    # Explicit non-interactive launches: -Command/-c, -File, -EncodedCommand, -NonInteractive
+    $nonInteractiveSwitch = '^[-/](c|command|f|file|e|ec|encodedcommand|encodedarguments|noni|noninteractive)$'
+    return -not ($CommandLineArgs | Select-Object -Skip 1 | Where-Object { $_ -match $nonInteractiveSwitch })
+}
+
+if (-not (Test-InteractiveProfileSession)) { return }
+
 # --- Configuration ------------------------------------------------------------
 # Ensure TLS 1.2+ for GitHub APIs on older PowerShell
 try {
